@@ -1,0 +1,29 @@
+{
+  "name": "pollparty",
+  "version": "1.0.0",
+  "description": "Poll Party Node JS Web App",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shweaver-MSFT/PollParty.git"
+  },
+  "keywords": [
+    "Poll",
+    "Party",
+    "Node",
+    "JS",
+    "Powerpoint",
+    "Add",
+    "In"
+  ],
+  "author": "skommireddi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shweaver-MSFT/PollParty/issues"
+  },
+  "homepage": "https://github.com/shweaver-MSFT/PollParty#readme"
+}
