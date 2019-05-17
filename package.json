@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/shweaver-MSFT/PollParty.git"
+    "url": "https://github.com/shweaver-MSFT/PollParty.git"
   },
   "keywords": [
     "Poll",
@@ -20,10 +20,15 @@
     "Add",
     "In"
   ],
-  "author": "skommireddi",
+  "author": "PAX Ninjas",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/shweaver-MSFT/PollParty/issues"
   },
-  "homepage": "https://github.com/shweaver-MSFT/PollParty#readme"
+  "homepage": "https://github.com/shweaver-MSFT/PollParty#readme",
+  "dependencies": {
+    "generator-office": "^1.2.4",
+    "express": "^4.17.0",
+    "fs": "0.0.1-security"
+  }
 }
