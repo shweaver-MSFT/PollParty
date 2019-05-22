@@ -1,13 +1,20 @@
 body {
-    padding: none;
-    margin: none;
+    padding: 0;
+    margin: 0;
 }
 
 #content-root {
-    width: 100vw;
-    height: 100vh;
+    
+}
+
+#content-root .view {
+    
 }
 
 #templates {
+    display: none !important;
+}
+
+.hidden {
     display: none !important;
 }
