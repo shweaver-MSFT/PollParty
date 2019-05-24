@@ -32,6 +32,15 @@ app.get('/add-in', function(req, res) {
     });
 });
 
+app.get('/api/question', function(req, res) {
+    // TODO: inspect request for presentation and slide ids
+    // Lookup the data and return as json.
+    res.setHeader('Content-Type', 'application/json');
+    res.json({
+        questionText: "Hello world?"
+    });
+})
+
 // Invalid path
 app.all("*", function(req, res) {
 

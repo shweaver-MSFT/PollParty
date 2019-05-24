@@ -10,7 +10,7 @@
 
             try {
                 // Check for existing state
-                let hasExistingState = false; // TODO: Query backend for existing state
+                let hasExistingState = true; // TODO: Query backend for existing state
 
                 // Check if presenting or not
                 let isPresenting = false; // TODO: Query Office.js to see if we are actively presenting
@@ -69,10 +69,15 @@
             let view = new viewType();
             let template = document.querySelector(`#templates ${view.templateSelector}`).cloneNode(true);
 
-            let contentRoot = document.querySelector("#content-root");
-            contentRoot.innerHTML = template.outerHTML;
-
             view.initialize(template, data);
+
+            let contentRoot = document.querySelector("#content-root");
+            while (contentRoot.firstChild)
+            {
+                contentRoot.removeChild(contentRoot.firstChild);
+            }
+            contentRoot.appendChild(template);
+
         };
 
         this.initialize = initialize;
