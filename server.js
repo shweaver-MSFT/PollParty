@@ -1,8 +1,9 @@
 const http = require('http');
 const path = require('path');
 const fs = require('fs');
-const express = require('express')
+const express = require('express');
 const url = require('url');
+const question = require('./data/question');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -32,13 +33,14 @@ app.get('/add-in', function(req, res) {
     });
 });
 
+// routes for question CRUD operations
 app.get('/api/question', function(req, res) {
     // TODO: inspect request for presentation and slide ids
     // Lookup the data and return as json.
     res.setHeader('Content-Type', 'application/json');
-    res.json({
-        questionText: "Hello world?"
-    });
+
+    var id = 1;
+    res.json(question.get(id));
 })
 
 // Invalid path
