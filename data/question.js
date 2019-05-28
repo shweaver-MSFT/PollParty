@@ -2,7 +2,7 @@
 class question { 
     
     static get(id){
-        return this.questions.find(item => item.id == id); 
+        return this.questions.find(q => q.id == id); 
     }    
 
     static save(slideId, presentationId, text){
