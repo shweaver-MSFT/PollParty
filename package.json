@@ -27,8 +27,9 @@
   },
   "homepage": "https://github.com/shweaver-MSFT/PollParty#readme",
   "dependencies": {
-    "generator-office": "^1.2.4",
     "express": "^4.17.0",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "generator-office": "^1.2.4",
+    "randomatic": "^3.1.1"
   }
 }
