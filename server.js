@@ -5,6 +5,7 @@ const express = require('express');
 const url = require('url');
 const bodyParser = require('body-parser')
 const questionData = require('./public/api/question');
+const sessionData = require('./public/api/session');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -35,28 +36,44 @@ app.get('/add-in', function(req, res) {
 });
 
 // routes for question CRUD operations
-app.post('*/api/question', function(req, res) {
-    // TODO: inspect request for presentation and slide ids
+app.get('*/api/question', function(req, res) {
     
-    let reqJson = req.body;
+    try {
+        let presentationId = parseInt(req.query.pid);
+        let slideId = parseInt(req.query.sid);
 
-    console.log("The correct route");
+        // Question id is simple combination of presentation id and slide id
+        let question = questionData.get(presentationId, slideId);
 
-    let presentationId = reqJson.pid;//["pid"];
-    let slideId = reqJson["sid"];
+        if (question === null) {
+            res.statusCode = 204; // No Content
+        }
 
-    // Question id is simple combination of presentation id and slide id
-    let question = questionData.get(presentationId, slideId);
-
-    if (question === null) {
-        res.statusCode = 204; // No Content
+        res.statusCode = 200; // OK
+        res.json(question);
+    }
+    catch(e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
         res.end();
     }
-
-    res.statusCode = 200; // OK
-    res.json(question);
-    res.end();
 })
+
+// route for get/create session
+app.get('/api/session', function(req, res) {
+    // TODO: this may change, testing api, update as needed
+    res.setHeader('Content-Type', 'application/json');  
+    var sessionId = session.createSession(1, 1);  
+    var question = session.joinSession(sessionId, 1);
+    var success = session.updateSession(sessionId, 1, true);
+    session.updateSession(sessionId, 1, true);    
+    session.updateSession(sessionId, 1, false);
+    var responses = session.getSession(sessionId, 1);
+    res.json(responses);    
+})
+
 
 // Invalid path
 /*

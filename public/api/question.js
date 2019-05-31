@@ -6,7 +6,7 @@ class question {
     }
     
     static get(presentationId, slideId){
-        return this.questions.find(item => item.presentationId === presentationId && item.slideId === slideId); 
+        return this.questions.find(item => item.presentationId === presentationId && item.slideId === slideId);
     }
 
     static save(slideId, presentationId, text){
@@ -14,14 +14,14 @@ class question {
     }
 
     static edit(id, slideId, presentationId, text){
-        var item = get(id);
+        var item = this.get(id);
         item.slideId = slideId;
         item.presentationId = presentationId;
         item.text = text;
     }
 
     static delete(id){
-        this.questions.pop(get(id));
+        this.questions.pop(this.get(id));
     }    
 }
 

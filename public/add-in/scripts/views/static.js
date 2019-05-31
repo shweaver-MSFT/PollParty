@@ -18,43 +18,35 @@
                 let presentationId = 1;
                 let slideId = 1;
 
-                let url = "./api/question";
+                let url = `./api/question?pid=${presentationId}&sid=${slideId}`;
 
                 let xhr = new XMLHttpRequest();
-                xhr.overrideMimeType("application/json");
-                xhr.open("POST", url)
-                xhr.send(JSON.stringify({
-                    pid: presentationId,
-                    sid: slideId
-                }));
+                xhr.responseType = "json";
+                xhr.open("GET", url);
                 xhr.addEventListener("load", function() {
                     if (xhr.status !== 200) {
                         return;
                     }
                     
                     // Inspect json and populate the question object
-                    question = JSON.parse(xhr.responseText);
+                    question = xhr.response;
+                    if (question !== null) {
 
-                    // Configure question text
-                    if (question !== null && question.questionText != undefined) {
-                        questionText.innerText = question.questionText;
-                    }
-
-                    // Configure edit button
-                    editButton.disabled = false;
-                    editButton.addEventListener("click", function() {
-                        
-                        // Navigate to the edit view
-                        window.PollParty.App.navigate(window.PollParty.Views.EditView, {
-                            question: question
+                        // Configure question text
+                        questionText.innerText = question.text;
+                    
+                        // Configure edit button
+                        editButton.disabled = false;
+                        editButton.addEventListener("click", function() {
+                            
+                            // Navigate to the edit view
+                            window.PollParty.App.navigate(window.PollParty.Views.EditView, {
+                                question: question
+                            });
                         });
-                    });
-                });
-                xhr.addEventListener("readystatechanged", function() {
-                    if (xhr.readyState === 4) {
-                        console.log("Woot");
                     }
                 });
+                xhr.send();
             }
         };
 
