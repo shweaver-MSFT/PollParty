@@ -16,13 +16,13 @@
                 // TODO: Attempt to retrieve the question from the backend 
                 // using the presentation id and slide id
                 let presentationId = 1;
-                let slideId = 2;
+                let slideId = 1;
 
-                let url = "/api/question";
+                let url = "./api/question";
 
                 let xhr = new XMLHttpRequest();
                 xhr.overrideMimeType("application/json");
-                xhr.open("GET", url)
+                xhr.open("POST", url)
                 xhr.send(JSON.stringify({
                     pid: presentationId,
                     sid: slideId
@@ -49,6 +49,11 @@
                             question: question
                         });
                     });
+                });
+                xhr.addEventListener("readystatechanged", function() {
+                    if (xhr.readyState === 4) {
+                        console.log("Woot");
+                    }
                 });
             }
         };

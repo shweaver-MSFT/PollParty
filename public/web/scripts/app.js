@@ -33,10 +33,14 @@
             let view = new viewType();
             let template = document.querySelector(`#templates ${view.templateSelector}`).cloneNode(true);
 
-            let contentRoot = document.querySelector("#content-root");
-            contentRoot.innerHTML = template.outerHTML;
-
             view.initialize(template, data);
+
+            let contentRoot = document.querySelector("#content-root");
+            while (contentRoot.firstChild)
+            {
+                contentRoot.removeChild(contentRoot.firstChild);
+            }
+            contentRoot.appendChild(template);
         };
 
         this.initialize = initialize;

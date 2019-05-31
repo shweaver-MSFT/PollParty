@@ -1,9 +1,13 @@
 // Question class exposing CRUD operations to add, read, edit, delete questions
 class question { 
     
-    static get(id){
+    static getById(id){
         return this.questions.find(item => item.id == id); 
-    }    
+    }
+    
+    static get(presentationId, slideId){
+        return this.questions.find(item => item.presentationId === presentationId && item.slideId === slideId); 
+    }
 
     static save(slideId, presentationId, text){
         this.questions.push({id: this.id + 1, slideId: slideId, presentationId: presentationId, text: text });

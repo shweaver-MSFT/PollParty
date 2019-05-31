@@ -11,10 +11,6 @@ body {
     
 }
 
-#templates {
-    display: none !important;
-}
-
 .hidden {
     display: none !important;
 }

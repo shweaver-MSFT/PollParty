@@ -77,7 +77,6 @@
                 contentRoot.removeChild(contentRoot.firstChild);
             }
             contentRoot.appendChild(template);
-
         };
 
         this.initialize = initialize;
