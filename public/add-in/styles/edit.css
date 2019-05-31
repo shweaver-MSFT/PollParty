@@ -1,0 +1,44 @@
+.edit.view {
+    display: flex;
+}
+
+.edit.view .view-padding {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.edit.view .upper-section {
+    max-width: 496px;
+}
+
+.edit.view .app-name {
+    font-weight: bold;
+    font-family: 'Merriweather Sans';
+    font-size: 24px;
+}
+
+.edit.view .instruction-text {
+    margin-top: 64px;
+    font-family: 'Merriweather Sans';
+    font-size: 24px;
+    line-height: 32px;
+}
+
+.edit.view .save-button {
+    margin-top: 64px;
+}
+
+/* Offset for .question-input: 8px padding + 2 px border */
+.edit.view .question-padding {
+    margin-top: 64px;
+    margin-bottom: 10px; 
+}
+
+.edit.view .question-input {
+    font-weight: lighter;
+    font-family: 'Segoe UI';
+    font-size: 96px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}

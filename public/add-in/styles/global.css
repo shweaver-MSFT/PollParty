@@ -14,9 +14,13 @@ button {
     font-size: 24px;
 }
 
-/* TODO: Add button hover state
+/* TODO: Add button hover and disabled states
 button:hover {
     
+}
+
+button:disabled {
+
 }
 */
 
@@ -24,6 +28,11 @@ button:hover {
     height: 100vh;
     width: 100vw;
     position: absolute;
+    background: #4C4A48;
+}
+
+.view-padding {
+    margin: 88px 64px;
 }
 
 .hidden {

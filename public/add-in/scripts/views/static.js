@@ -8,11 +8,31 @@
             let editButton = view.querySelector(".command-button");
             let questionText = view.querySelector(".question-text");
 
+            editButton.disabled = true;
+
             // Get the question data
             let question = data["question"] || null;
-            if (question === null) {
-                
-                // TODO: Attempt to retrieve the question from the backend 
+
+            let finishSetup = function () {
+                // Configure question text
+                questionText.innerText = question.text;
+            
+                // Configure edit button
+                editButton.disabled = false;
+                editButton.addEventListener("click", function() {
+                    
+                    // Navigate to the edit view
+                    window.PollParty.App.navigate(window.PollParty.Views.EditView, {
+                        question: question
+                    });
+                });
+            }
+
+            if (question !== null) {
+                finishSetup();
+            }
+            else {
+                // Attempt to retrieve the question from the backend 
                 // using the presentation id and slide id
                 let presentationId = 1;
                 let slideId = 1;
@@ -29,21 +49,7 @@
                     
                     // Inspect json and populate the question object
                     question = xhr.response;
-                    if (question !== null) {
-
-                        // Configure question text
-                        questionText.innerText = question.text;
-                    
-                        // Configure edit button
-                        editButton.disabled = false;
-                        editButton.addEventListener("click", function() {
-                            
-                            // Navigate to the edit view
-                            window.PollParty.App.navigate(window.PollParty.Views.EditView, {
-                                question: question
-                            });
-                        });
-                    }
+                    finishSetup();
                 });
                 xhr.send();
             }

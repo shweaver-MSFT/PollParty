@@ -1,17 +1,14 @@
-.static.view {
-    background: #4C4A48;
-}
-
-.static.view .padding {
-    margin-left: 64px;
-    margin-right: 64px;
-    margin-top: 88px;
+/* Offset for .question-input: 8px padding + 2 px border */
+.static.view .question-padding {
+    margin-top: 64px;
+    margin-bottom: 10px; 
 }
 
 .static.view .question-text {
     font-weight: lighter;
     font-family: 'Segoe UI';
     font-size: 96px;
+    padding-bottom: 8px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.5);
 }
 
