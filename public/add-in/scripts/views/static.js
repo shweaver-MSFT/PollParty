@@ -12,7 +12,6 @@
             let question = data["question"] || null;
             if (question === null) {
                 
-                // TODO: Move fetch code to separate class
                 // TODO: Attempt to retrieve the question from the backend 
                 // using the presentation id and slide id
                 let presentationId = 1;

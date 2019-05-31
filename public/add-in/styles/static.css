@@ -1,0 +1,20 @@
+.static.view {
+    background: #4C4A48;
+}
+
+.static.view .padding {
+    margin-left: 64px;
+    margin-right: 64px;
+    margin-top: 88px;
+}
+
+.static.view .question-text {
+    font-weight: lighter;
+    font-family: 'Segoe UI';
+    font-size: 96px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+}
+
+.static.view .command-button {
+    margin-top: 64px;
+}
