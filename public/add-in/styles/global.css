@@ -34,6 +34,20 @@ button:disabled {
     position: absolute;
 }
 
+.padding {
+    margin: 88px 64px 64px 64px;
+}
+
 .hidden {
     display: none !important;
+}
+
+.bottom {
+    bottom: 0px;
+    position: absolute;
+}
+
+.right {
+    right: 0px;
+    position: absolute;
 }
