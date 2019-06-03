@@ -38,6 +38,10 @@ button:disabled {
     margin: 88px 64px 64px 64px;
 }
 
+.nowrap {
+    white-space: nowrap;
+}
+
 .hidden {
     display: none !important;
 }
