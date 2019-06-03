@@ -1,0 +1,33 @@
+.live.view .question-text {
+    font-weight: lighter;
+    font-family: 'Segoe UI';
+    font-size: 68px;
+    max-width: 780px;
+}
+
+.live.view .answer-text {
+    font-family: 'Segoe UI';
+    font-size: 64px;
+}
+
+.live.view .percent-text {
+    font-family: 'Segoe UI';
+    font-size: 56px;
+    min-width: 136px;
+    text-align: right;
+}
+
+.live.view .answer-yes, .live.view .answer-no {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.live.view .meter {
+    flex: 1;
+    margin: 0 56px -8px 32px;
+}
+
+.live.view .meter .progress {
+    width: 0;
+}

@@ -34,8 +34,18 @@ button:disabled {
     position: absolute;
 }
 
+.footer-text {
+    font-family: "Segoe UI";
+    font-size: 56px;
+    font-weight: lighter;
+}
+
 .padding {
     margin: 88px 64px 64px 64px;
+}
+
+.side-padding {
+    margin: 0px 64px;
 }
 
 .nowrap {
@@ -54,4 +64,16 @@ button:disabled {
 .right {
     right: 0px;
     position: absolute;
+}
+
+.middle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.wide {
+    position: absolute;
+    right: 0px;
+    left: 0px;
 }

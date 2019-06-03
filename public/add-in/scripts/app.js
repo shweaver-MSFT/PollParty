@@ -7,7 +7,7 @@
 
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
-
+            
             try {
                 // Check for existing state
                 let hasExistingState = true; // TODO: Query backend for existing state
