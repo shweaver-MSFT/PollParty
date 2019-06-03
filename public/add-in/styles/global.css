@@ -2,6 +2,7 @@ body {
     padding: 0;
     margin: 0;
     color: #FFFFFF;
+    background: #4C4A48;
 }
 
 button {
@@ -12,6 +13,7 @@ button {
     border: 2px solid #FFFFFF;
     font-family: 'Segoe UI';
     font-size: 24px;
+    white-space: nowrap;
 }
 
 /* TODO: Add button hover and disabled states
@@ -25,14 +27,11 @@ button:disabled {
 */
 
 #content-root .view {
-    height: 100vh;
-    width: 100vw;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
     position: absolute;
-    background: #4C4A48;
-}
-
-.view-padding {
-    margin: 88px 64px;
 }
 
 .hidden {
