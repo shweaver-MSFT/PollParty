@@ -21,6 +21,10 @@
     padding: 24px;
     position: absolute;
     background: #000000;
-    border: 2px solid red;;
-    white-space: nowrap;
+    border: 2px solid red;
+}
+
+.demo.view .debug-panel button {
+    width: 248px;
+    margin: 0 0 2px 0;
 }
