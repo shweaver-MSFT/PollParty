@@ -1,3 +1,26 @@
 .demo.view {
-    
+    height: 0;
+    width: 0;
+    position: absolute;
+    color: #000000;
+}
+
+.demo.view .toggle-button {
+    height: 24px;
+    width: 24px;
+    color: #FFFFFF;
+    background: red;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.demo.view .debug-panel {
+    padding: 24px;
+    position: absolute;
+    background: #000000;
+    border: 2px solid red;;
+    white-space: nowrap;
 }
