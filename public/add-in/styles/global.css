@@ -33,6 +33,7 @@ button:hover {
     right: 0px;
     position: absolute;
     font-family: "Segoe UI";
+    overflow: hidden;
 }
 
 .footer-text {

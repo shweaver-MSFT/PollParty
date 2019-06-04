@@ -3,6 +3,7 @@
     width: 0;
     position: absolute;
     color: #000000;
+    z-index: 1000;
 }
 
 .demo.view .toggle-button {
