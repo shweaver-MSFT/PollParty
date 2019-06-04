@@ -16,15 +16,15 @@ button {
     white-space: nowrap;
 }
 
-/* TODO: Add button hover and disabled states
-button:hover {
-    
-}
-
 button:disabled {
-
+    background: rgba(255,255,255,.5) !important;
+    color: #4C4A48 !important;
 }
-*/
+
+button:hover {
+    background: #FFFFFF;
+    color: #4C4A48;
+}
 
 #content-root .view {
     top: 0px;
