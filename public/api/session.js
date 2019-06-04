@@ -1,5 +1,4 @@
 // session class exposing CRUD operations to create, read, update, delete sessions
-const uuidv4 = require('uuid/v4');
 var randomize = require('randomatic');
 const questionsData = require('./question');
 
