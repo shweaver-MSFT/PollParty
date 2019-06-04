@@ -32,10 +32,10 @@ button:hover {
     left: 0px;
     right: 0px;
     position: absolute;
+    font-family: "Segoe UI";
 }
 
 .footer-text {
-    font-family: "Segoe UI";
     font-size: 56px;
     font-weight: lighter;
 }
@@ -70,6 +70,12 @@ button:hover {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%)
 }
 
 .wide {

@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="styles/meter.css" />
     <link rel="stylesheet" href="styles/connect.css" />
     <link rel="stylesheet" href="styles/edit.css" />
+    <link rel="stylesheet" href="styles/error.css" />
     <link rel="stylesheet" href="styles/live.css" />
     <link rel="stylesheet" href="styles/static.css" />
 </head>
@@ -58,8 +59,11 @@
         </div>
 
         <div class="error view">
-            <p></p>
-            <button></button>
+            <div class="padding">
+                <div class="error-label">Error</div>
+                <div class="error-text">Uh-oh, we've hit an error. Tap reset to start over.</div>
+                <button class="command-button">Reset</button>
+            </div>
         </div>
 
         <div class="live view">
@@ -107,7 +111,9 @@
         </div>
 
         <div class="loading view">
-            <p>Loading...</p>
+            <div class="middle center">
+                <span>Loading...</span>
+            </div>
         </div>
     </div>
 

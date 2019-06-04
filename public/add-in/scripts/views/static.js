@@ -12,7 +12,7 @@
             editButton.disabled = true;
 
             // Get the question data
-            let questionData = data["question"] || null;
+            let questionData = (data !== undefined) ? data.question : null;
 
             let finishSetup = function () {
 
