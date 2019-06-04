@@ -6,8 +6,8 @@
         let initialize = function () {
 
             // Show the loading view while we init
-            navigate(window.PollParty.Views.LoadingView);
-            
+            navigate(window.PollParty.Views.EditView);
+            return;
             try {
                 // Check for existing state
                 let hasExistingState = true; // TODO: Query backend for existing state

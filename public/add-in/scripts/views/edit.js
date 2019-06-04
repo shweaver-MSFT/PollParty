@@ -5,7 +5,7 @@
 
         let initialize = function (view, data) {
             
-            let question = data["question"];
+            let question = (data !== undefined) ? data["question"] : null;
 
             let saveButton = view.querySelector(".save-button");
             saveButton.addEventListener("click", function () {
