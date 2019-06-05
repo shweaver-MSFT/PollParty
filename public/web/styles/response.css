@@ -1,0 +1,43 @@
+.response.view {
+
+}
+
+.response.view .app-logo {
+    font-size: 32px;
+    font-weight: lighter;
+}
+
+.response.view .question-label {
+    font-size: 28px;
+    font-family: "Merriweather Sans";
+    text-align: center;
+}
+
+.response.view .question-text {
+    font-size: 24px;
+    font-weight: bolder;
+    margin-top: 64px;
+    text-align: center;
+}
+
+.response.view .button-panel {
+    margin-top: 64px;
+    display: flex; 
+    flex-direction: column;
+    align-items: center;
+}
+
+.response.view .button-panel button {
+    max-width: 296px;
+    width: 100%;
+    height: 72px;
+}
+
+.response.view .button-panel button.selected {
+    background: #FFFFFF !important;
+    color: #E74856 !important;
+}
+
+.response.view .button-panel .no-button {
+    margin-top: 24px;
+}
