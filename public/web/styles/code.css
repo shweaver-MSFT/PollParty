@@ -1,0 +1,36 @@
+.code.view {
+    white-space: nowrap;
+}
+
+.code.view .app-title {
+    font-size: 32px;
+    font-weight: lighter;
+}
+
+.code.view .enter-text {
+    font-size: 28px;
+    text-align: center;
+}
+
+.code.view .code-panel {
+    text-align: center;
+    margin-top: 64px;
+}
+
+.code.view .code-panel .digit {
+    font-size: 80px;
+    font-weight: lighter;
+    border-bottom: 2px solid #FFFFFF;
+    margin: 0 8px;
+}
+
+.code.view .button-panel {
+    display: flex;
+    justify-content: center;
+}
+
+.code.view .confirm-button {
+    max-width: 296px;
+    height: 72px;
+    flex: 1;
+}
