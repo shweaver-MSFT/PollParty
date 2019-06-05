@@ -16,14 +16,19 @@ button {
     white-space: nowrap;
 }
 
-button:disabled {
-    background: rgba(255,255,255,.5) !important;
+button:hover {
+    background: #FFFFFF !important;
     color: #4C4A48 !important;
 }
 
-button:hover {
-    background: #FFFFFF;
-    color: #4C4A48;
+button:active {
+    background: #FFFFFF !important;
+    color: #E74856 !important;
+}
+
+button:disabled {
+    background: rgba(255,255,255,.5) !important;
+    color: #4C4A48 !important;
 }
 
 #content-root .view {
