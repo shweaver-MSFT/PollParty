@@ -2,16 +2,6 @@
     display: flex;
 }
 
-.edit.view .view-padding {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
-
-.edit.view .upper-section {
-    max-width: 496px;
-}
-
 .edit.view .app-name {
     font-weight: bold;
     font-family: 'Merriweather Sans';
@@ -23,10 +13,18 @@
     font-family: 'Merriweather Sans';
     font-size: 24px;
     line-height: 32px;
+    width: 496px;
+    min-width: 496px;
 }
 
 .edit.view .save-button {
     margin-top: 64px;
+}
+
+.edit.view .top {
+    z-index: 1;
+    width: 100%;
+    margin-top: 0;
 }
 
 /* Offset for .question-input: 8px padding + 2 px border */
@@ -41,4 +39,20 @@
     font-size: 96px;
     padding-bottom: 8px;
     border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+    border-top: 0;
+    border-right: 0;
+    border-left: 0;
+    background: transparent;
+    color: #FFFFFF;
+    width: 100%;
+}
+
+.edit.view .question-input.placeholder {
+    opacity: .5;
+}
+
+.edit.view .fade {
+    background: linear-gradient(#4C4A48 80%, transparent);
+    padding-bottom: 100px;
+    padding-top: 88px;
 }

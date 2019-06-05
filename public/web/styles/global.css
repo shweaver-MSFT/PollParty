@@ -1,16 +1,99 @@
 body {
     padding: 0;
     margin: 0;
+    color: #FFFFFF;
+    background: #4C4A48;
 }
 
-#content-root {
-    
+button {
+    height: 56px;
+    padding: 0 28px;
+    background: transparent;
+    color: #FFFFFF;
+    border: 2px solid #FFFFFF;
+    font-family: 'Segoe UI';
+    font-size: 24px;
+    white-space: nowrap;
+}
+
+button:disabled {
+    background: rgba(255,255,255,.5) !important;
+    color: #4C4A48 !important;
+}
+
+button:hover {
+    background: #FFFFFF;
+    color: #4C4A48;
 }
 
 #content-root .view {
-    
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    position: absolute;
+    font-family: "Segoe UI";
+    overflow: hidden;
+}
+
+.footer-text {
+    font-size: 56px;
+    font-weight: lighter;
+}
+
+.padding {
+    margin: 88px 64px 64px 64px;
+}
+
+.side-padding {
+    margin-right: 64px;
+    margin-left: 64px;
+}
+
+.top-padding {
+    margin-top: 88px;
+}
+
+.bottom-padding {
+    margin-bottom: 64px;
+}
+
+.nowrap {
+    white-space: nowrap;
 }
 
 .hidden {
     display: none !important;
+}
+
+.bottom {
+    bottom: 0px;
+    position: absolute;
+}
+
+.right {
+    right: 0px;
+    position: absolute;
+}
+
+.middle {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%)
+}
+
+.middle.center {
+    transform: translate(-50%, -50%)
+}
+
+.wide {
+    position: absolute;
+    right: 0px;
+    left: 0px;
 }

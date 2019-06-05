@@ -1,6 +1,5 @@
-/* Offset for .question-input: 8px padding + 2 px border */
-.static.view .question-padding {
-    margin-top: 64px;
+/* Offset for .question-text: 8px padding + 2 px border */
+.static.view .question-text {
     margin-bottom: 10px; 
 }
 

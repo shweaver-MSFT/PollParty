@@ -26,6 +26,12 @@ class question {
 }
 
 // Some mock data
-question.questions = [{id: 1, slideId: 1, presentationId: 1, text: "Poll Party Hello World?"}];
+question.questions = [{
+    id: 1, 
+    slideId: 1, 
+    presentationId: 1, 
+    questionIndex: 1,
+    questionTotal: 1,
+    text: "Poll Party Hello World?"}];
 
 module.exports = question;

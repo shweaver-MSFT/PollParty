@@ -17,19 +17,38 @@
         */
         let initialize = function (view, data) {
             
-            // Update the error message
-            let p = view.querySelector("p");
-            p.innerHTML = data["message"];
+            let commandButton = view.querySelector(".command-button");
+            let errorTextSpan = view.querySelector(".error-text");
 
-            // Configure the button
-            let button = view.querySelector("button");
-            if (data["showButton"] === false) {
-                button.classList.add("hidden");
-            }
+            // Disable the button during configuration
+            commandButton.disabled = true;
+
+            if (data !== undefined) {
+                
+                // Update the error text
+                errorTextSpan.innerText = data["message"];
+
+                // Configure the button
+                if (data["showButton"] === false) {
+                    commandButton.classList.add("hidden");
+                }
+                else {
+                    commandButton.innerHTML = data["commandText"];
+                    commandButton.addEventListener("click", function() {
+                        data["commandCallback"]();
+                    });
+                }
+            } 
             else {
-                button.innerHTML = data["commandText"];
-                button.addEventListener("click", data["commandCallback"]);
+
+                // Default config for when error data isn't provided
+                commandButton.addEventListener("click", function() {
+                    window.PollParty.App.initialize();
+                });
             }
+            
+            // Reenable the button post configuration
+            commandButton.disabled = false;
         };
 
         this.initialize = initialize;

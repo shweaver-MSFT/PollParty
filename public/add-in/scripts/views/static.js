@@ -6,16 +6,18 @@
         let initialize = function (view, data) {
             
             let editButton = view.querySelector(".command-button");
-            let questionText = view.querySelector(".question-text");
+            let questionTextSpan = view.querySelector(".question-text");
+            let questionCountDiv = view.querySelector('.question-count');
 
             editButton.disabled = true;
 
             // Get the question data
-            let question = data["question"] || null;
+            let questionData = (data !== undefined) ? data.question : null;
 
             let finishSetup = function () {
+
                 // Configure question text
-                questionText.innerText = question.text;
+                questionTextSpan.innerText = questionData.text;
             
                 // Configure edit button
                 editButton.disabled = false;
@@ -23,12 +25,15 @@
                     
                     // Navigate to the edit view
                     window.PollParty.App.navigate(window.PollParty.Views.EditView, {
-                        question: question
+                        question: questionData
                     });
                 });
+
+                // Configure question index and total
+                questionCountDiv.innerText = `${questionData.questionIndex}/${questionData.questionTotal}`;
             }
 
-            if (question !== null) {
+            if (questionData !== null) {
                 finishSetup();
             }
             else {
@@ -48,7 +53,7 @@
                     }
                     
                     // Inspect json and populate the question object
-                    question = xhr.response;
+                    questionData = xhr.response;
                     finishSetup();
                 });
                 xhr.send();

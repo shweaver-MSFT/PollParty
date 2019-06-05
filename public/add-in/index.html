@@ -11,16 +11,42 @@
     <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js" type="text/javascript"></script>
 
     <link rel="stylesheet" href="styles/global.css" />
+    <link rel="stylesheet" href="styles/demo.css" />
+    <link rel="stylesheet" href="styles/meter.css" />
+    <link rel="stylesheet" href="styles/connect.css" />
     <link rel="stylesheet" href="styles/edit.css" />
+    <link rel="stylesheet" href="styles/error.css" />
+    <link rel="stylesheet" href="styles/live.css" />
     <link rel="stylesheet" href="styles/static.css" />
 </head>
 <body>
     <div id="content-root"></div>
 
     <div id="templates" class="hidden">
+        
+        <div class="connect view"> 
+            <div class="padding">
+                <div class="connect-text">
+                    Use the code below to connect &amp; vote:
+                </div>
+                <div class="nowrap">
+                    <div class="join-code"></div>
+                    <div class="screens">
+                        <div class="screen code"></div>
+                        <div class="screen connecting"></div>
+                        <div class="screen connected"></div>
+                        <div class="screen vote"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="padding bottom right footer-text">
+                <span class="question-count"></span>
+            </div>
+        </div>
+
         <div class="edit view">
-            <div class="view-padding">
-                <div class="upper-section">
+            <div class="padding top">
+                <div class="fade">
                     <div class="app-name">Poll Party</div>
                     <div class="instruction-text">
                         Enter your survey question and press "Save Slide". 
@@ -29,37 +55,87 @@
                     </div>
                     <button class="save-button">Save slide</button>
                 </div>
-                <div class="question-padding">
-                    <span class="question-input">Type Your Question</span>
-                </div>
+            </div>
+            <div class="padding bottom">
+                <span class="question-input"></span>
             </div>
         </div>
 
         <div class="error view">
-            <p></p>
-            <button></button>
+            <div class="padding">
+                <div class="error-label">Error</div>
+                <div class="error-text">Uh-oh, we've hit an error. Tap reset to start over.</div>
+                <button class="command-button">Reset</button>
+            </div>
         </div>
 
         <div class="live view">
-            <input type="text" />
-            <button></button>
+            <div class="padding question-text">
+                Did you eat your ContosO's this morning?
+            </div>
+            <div class="side-padding middle wide">
+                <div class="answer-yes">
+                    <span class="answer-text">Yes</span>
+                    <div class="meter">
+                        <span>
+                            <div class="progress"></div>
+                        </span>
+                    </div>
+                    <span class="percent-text">00%</span>
+                </div>
+                <div class="answer-no">
+                    <span class="answer-text">No</span>
+                    <div class="meter">
+                        <span>
+                            <div class="progress"></div>
+                        </span>
+                    </div>
+                    <span class="percent-text">00%</span>
+                </div>
+            </div>
+            <div class="padding bottom left footer-text">
+                <span class="join-code">Code: 1234</span>
+            </div>
+            <div class="padding bottom right footer-text">
+                <span class="question-count">1/1</span>
+            </div>
         </div>
 
         <div class="static view">
-            <div class="view-padding">
-                <div class="question-padding">
+            <div class="padding">
+                <div>
                     <span class="question-text">Enter your question here</span>
                 </div>
                 <button class="command-button">Edit slide</button>
             </div>
+            <div class="padding bottom right footer-text">
+                <span class="question-count"></span>
+            </div>
         </div>
 
         <div class="loading view">
-            <p>Loading...</p>
+            <div class="middle center">
+                <span>Loading...</span>
+            </div>
+        </div>
+
+        <div class="demo view">
+            <div class="toggle-button">!</div>
+            <div class="hidden debug-panel">
+                <button class="reset-button">Reset</button>
+                <button class="nav-connect-button">Connect View</button>
+                <button class="nav-edit-button">Edit View</button>
+                <button class="nav-error-button">Error View</button>
+                <button class="nav-live-button">Live View</button>
+                <button class="nav-loading-button">Loading View</button>
+                <button class="nav-static-button">Static View</button>
+            </div>
         </div>
     </div>
 
     <script src="scripts/app.js" type="text/javascript"></script>
+    <script src="scripts/demo.js" type="text/javascript"></script>
+    <script src="scripts/views/connect.js" type="text/javascript"></script>
     <script src="scripts/views/edit.js" type="text/javascript"></script>
     <script src="scripts/views/error.js" type="text/javascript"></script>
     <script src="scripts/views/live.js" type="text/javascript"></script>
