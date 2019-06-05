@@ -1,0 +1,35 @@
+(function(){
+    "use strict";
+
+    function isPresenting() {
+        var isPresenting = false;
+        Office.context.document.getActiveViewAsync(function (asyncResult) {
+            if (asyncResult.status === "failed") {
+                console.log("Action getActiveViewAsync failed with error: " + asyncResult.error.message);
+            }
+            else {                
+                isPresenting = asyncResult.value === "read";
+            }          
+        });
+
+        return isPresenting;
+    }
+
+    function getSelectedSlideId(){
+        return getSelectedSlide().id;        
+    }  
+
+    function getSelectedSlide() {    
+        var slide = {};
+        Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, function (asyncResult) {
+            if (asyncResult.status == "failed") {
+                console.log("Action getSelectedDataAsync failed with error: " + asyncResult.error.message);
+            }
+            else {
+                slide = asyncResult.value.slides[0];
+            }
+        });
+        return slide;
+    }
+
+})();
