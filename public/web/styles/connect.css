@@ -1,0 +1,20 @@
+.connect.view .content-panel {
+    text-align: center;
+}
+
+.connect.view .logo-panel {
+    border: 2px solid #FFFFFF;
+    padding: 24px;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.connect.view .app-logo {
+    font-size: 32px;
+    font-weight: lighter;
+}
+
+.connect.view .status-text {
+    margin-top: 64px;
+    font-size: 32px;
+}

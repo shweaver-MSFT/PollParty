@@ -5,6 +5,10 @@
 
         let initialize = function () {
 
+            
+            navigate(window.PollParty.Views.ConnectView);
+            return;
+
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
 
