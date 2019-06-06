@@ -94,7 +94,7 @@
         function submit() {
             
             let digitSpans = viewInstance.querySelector(".code-panel").querySelectorAll(".digit");
-            
+
             // Extract the code digits
             let code = "";
             for (var i = 0; i < digitSpans.length; i++) {
@@ -104,7 +104,7 @@
             }
 
             // Send to the connect view to handle the session connection
-            window.PollParty.App.navigate(window.PollParty.Views.ConnectView, code);
+            window.PollParty.App.navigate(window.PollParty.Views.ConnectView, { code: code });
         }
 
         this.initialize = initialize;
