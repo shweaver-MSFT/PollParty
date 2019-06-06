@@ -9,7 +9,7 @@
             navigate(window.PollParty.Views.LoadingView);
 
             try {
-                // TODO: Determine which view to load first
+                navigate(window.PollParty.Views.CodeView);
             }
             catch (e) {
 
