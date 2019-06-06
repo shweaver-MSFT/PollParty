@@ -27,6 +27,9 @@
             let navCodeButton = view.querySelector(".nav-code-button");
             navCodeButton.addEventListener("click", () => window.PollParty.App.navigate(window.PollParty.Views.CodeView));
             
+            let navConfirmButton = view.querySelector(".nav-confirm-button");
+            navConfirmButton.addEventListener("click", () => window.PollParty.App.navigate(window.PollParty.Views.ConfirmView));
+
             let navConnectButton = view.querySelector(".nav-connect-button");
             navConnectButton.addEventListener("click", () => window.PollParty.App.navigate(window.PollParty.Views.ConnectView));
 
