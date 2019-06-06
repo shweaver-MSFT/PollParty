@@ -5,6 +5,7 @@
 .response.view .app-logo {
     font-size: 32px;
     font-weight: lighter;
+    white-space: nowrap;
 }
 
 .response.view .question-label {

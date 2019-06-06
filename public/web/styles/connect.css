@@ -6,12 +6,12 @@
     border: 2px solid #FFFFFF;
     padding: 24px;
     display: inline-block;
-    white-space: nowrap;
 }
 
 .connect.view .app-logo {
     font-size: 32px;
     font-weight: lighter;
+    white-space: nowrap;
 }
 
 .connect.view .status-text {

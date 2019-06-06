@@ -1,0 +1,17 @@
+.error.view > div{
+    max-width: 780px;
+}
+
+.error.view .error-label{
+    font-size:  68px;
+    font-weight: lighter;             
+}
+
+.error.view .error-text {
+    font-size: 24px;
+    margin-top: 64px;
+}
+
+.error.view .command-button {
+    margin-top: 64px;
+}
