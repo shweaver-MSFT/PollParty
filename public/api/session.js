@@ -1,5 +1,5 @@
 // session class exposing CRUD operations to create, read, update, delete sessions
-var randomize = require('randomatic');
+const randomize = require('randomatic');
 const questionsData = require('./question');
 
 class session {     
