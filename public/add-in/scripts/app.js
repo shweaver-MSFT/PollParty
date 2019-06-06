@@ -6,8 +6,8 @@
         let initialize = function () {
 
             // Show the loading view while we init
-            navigate(window.PollParty.Views.EditView);
-            return;
+            navigate(window.PollParty.Views.LoadingView);
+            
             try {
                 // Check for existing state
                 let hasExistingState = true; // TODO: Query backend for existing state
@@ -41,9 +41,8 @@
                     else {
 
                         // Show the static/saved view
-                        navigate(window.PollParty.Views.StaticView, {
-                            // TODO: Populate view with existing data
-                        });
+                        // TODO: Populate view with the existing data
+                        navigate(window.PollParty.Views.StaticView);
                     }
                 }
             }

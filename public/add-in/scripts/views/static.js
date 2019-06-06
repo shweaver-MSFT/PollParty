@@ -16,6 +16,10 @@
 
             let finishSetup = function () {
 
+                if (questionData === null) {
+                    return;
+                }
+
                 // Configure question text
                 questionTextSpan.innerText = questionData.text;
             
