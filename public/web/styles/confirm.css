@@ -1,3 +1,42 @@
-.confirm.view {
-    
+.confirm.view .app-logo {
+    font-size: 32px;
+    font-weight: lighter;
+    white-space: nowrap;
+}
+
+.confirm.view .content-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.confirm.view .check-icon {
+    height: 120px;
+    width: 120px;
+    border: 2px solid #FFFFFF;
+    border-radius: 50%;
+}
+
+.confirm.view .status-text {
+    font-size: 28px;
+    font-family: "Merriweather Sans";
+    margin-top: 36px;
+    white-space: nowrap;
+}
+
+.confirm.view .description-text {
+    font-size: 20px;
+    margin-top: 36px;
+    text-align: center;
+}
+
+.confirm.view .code-text {
+    font-size: 28px;
+    font-family: "Merriweather Sans";
+    text-align: center;
+    white-space: nowrap;
+}
+
+.confirm.view .button-panel {
+    text-align: center;
 }
