@@ -1,6 +1,7 @@
 .confirm.view .app-logo {
     font-size: 32px;
     font-weight: lighter;
+    white-space: nowrap;
 }
 
 .confirm.view .content-panel {
@@ -20,6 +21,7 @@
     font-size: 28px;
     font-family: "Merriweather Sans";
     margin-top: 36px;
+    white-space: nowrap;
 }
 
 .confirm.view .description-text {
@@ -32,6 +34,7 @@
     font-size: 28px;
     font-family: "Merriweather Sans";
     text-align: center;
+    white-space: nowrap;
 }
 
 .confirm.view .button-panel {
