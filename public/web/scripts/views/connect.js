@@ -22,10 +22,28 @@
             let code = data.code;
 
             // TODO: Add api call here to get the active session for this code
+            let session = null;
 
-            // TODO: If no session, nav to error view
+            // If no session, nav to error view
+            if (session === null) {
+                window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
+                    message: "No valid session for the code provided.",
+                    showCommand: true,
+                    commandText: "Enter Code",
+                    commandCallback: function() {
+                        window.PollParty.App.navigate(window.PollParty.Views.CodeView);
+                    }
+                });
+                return;
+            }
 
-            // TODO: If valid session, get the question and nav to response view
+            // If valid session, nav to response view
+            let statusText = view.querySelector(".status-text");
+            statusText.innerText = "Connected";
+
+            window.PollParty.App.navigate(window.PollParty.Views.ResponseView, {
+                session: session
+            });
         };
 
         this.initialize = initialize;
