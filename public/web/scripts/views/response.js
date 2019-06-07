@@ -13,14 +13,13 @@
             if (sessionData !== null && sessionData !== undefined) {
 
                 let questionData = sessionData.currentQuestion;
-
-                if (questionData === null || questionData === undefined) {
+                if (questionData !== null && questionData !== undefined) {
 
                     let questionCount = view.querySelector(".question-count");
                     questionCount.innerText = `${sessionData.currentQuestionIndex}/${sessionData.questionTotal}`;
 
                     let questionText = view.querySelector(".question-text");
-                    questionText.innerText = questionData.Text;
+                    questionText.innerText = questionData.text;
                 }
             }
 
