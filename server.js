@@ -61,19 +61,67 @@ app.get('*/api/question', function(req, res) {
     }
 })
 
-// route for get/create session
-app.get('/api/session', function(req, res) {
-    // TODO: this may change, testing api, update as needed
-    res.setHeader('Content-Type', 'application/json');  
-    var sessionId = session.createSession(1, 1);  
-    var question = session.joinSession(sessionId, 1);
-    var success = session.updateSession(sessionId, 1, true);
-    session.updateSession(sessionId, 1, true);    
-    session.updateSession(sessionId, 1, false);
-    var responses = session.getSession(sessionId, 1);
-    res.json(responses);    
-})
+// route for getting a session by code
+app.get('*/api/session/:code', function(req, res) {
 
+    try {
+        let code = parseInt(req.params.code);
+
+        let session = sessionData.get(code);
+        if (session === null) {
+            res.statusCode = 204; // No Content
+            return;
+        }
+
+        res.statusCode = 200; // OK
+        res.json(session);
+    }
+    catch(e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+
+    return;    
+});
+
+// Route for adding responses to an active session
+app.post('*/api/session/:code/response/:response', function (req, res) {
+    
+    try {
+        let code = parseInt(req.params.code);
+        let response = parseInt(req.params.response);
+
+        let success = sessionData.addResponse(code, response);
+        if (success === false) {
+            res.statusCode = 204; // No Content
+            return;
+        }
+
+        res.statusCode = 200; // OK
+    }
+    catch(e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+});
+
+/*
+// TODO: this may change, testing api, update as needed
+res.setHeader('Content-Type', 'application/json');  
+var sessionId = session.createSession(1, 1);  
+var question = session.joinSession(sessionId, 1);
+var success = session.updateSession(sessionId, 1, true);
+session.updateSession(sessionId, 1, true);    
+session.updateSession(sessionId, 1, false);
+var responses = session.getSession(sessionId, 1);
+res.json(responses);
+*/
 
 // Invalid path
 /*
