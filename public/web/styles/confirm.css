@@ -10,11 +10,14 @@
     align-items: center;
 }
 
-.confirm.view .check-icon {
+.confirm.view .status-icon {
     height: 120px;
     width: 120px;
     border: 2px solid #FFFFFF;
     border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .confirm.view .status-text {
@@ -30,13 +33,23 @@
     text-align: center;
 }
 
-.confirm.view .code-text {
+.confirm.view .code-button {
     font-size: 28px;
     font-family: "Merriweather Sans";
     text-align: center;
     white-space: nowrap;
+    border: none;
+    margin-top: 18px;
 }
 
 .confirm.view .button-panel {
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.confirm.view .button-panel button {
+    max-width: 296px;
+    width: 100%;
+    height: 72px;
 }
