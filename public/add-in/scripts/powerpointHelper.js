@@ -1,5 +1,3 @@
-const uuidv4 = require('uuid/v4');
-
 (function(){
     "use strict";
 
@@ -38,12 +36,13 @@ const uuidv4 = require('uuid/v4');
     // Currently, didnt find any unique powerpoint document identifier we could use, so creating a unique guid and storing it in document settings 
     function getPresentationId() {   
         // check if a unique id already exists, if not create one
-        var uniqueDocumentId = Office.context.document.settings.get("docId");
+        var uniqueDocumentId = Office.context.document.settings.get("PresentationId");
         if(uniqueDocumentId == null){
-            var guid = uuidv4();
-            Office.context.document.settings.set("PresentationId", guid);
+            var uuid = window.PollParty.UuidGenerator.uuidv4Crypto();
+            Office.context.document.settings.set("PresentationId", uuid);
             // persist settings
             Office.context.document.settings.saveAsync(result => console.log("Save Setting Presentation Id: " + result));
-        }        
+        }  
+        return uniqueDocumentId;      
     }
 })();
