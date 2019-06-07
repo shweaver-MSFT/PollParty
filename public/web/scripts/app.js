@@ -9,7 +9,7 @@
             navigate(window.PollParty.Views.LoadingView);
 
             try {
-                // TODO: Determine which view to load first
+                navigate(window.PollParty.Views.CodeView);
             }
             catch (e) {
 
@@ -30,17 +30,19 @@
         */
         let navigate = function (viewType, data) {
 
-            let view = new viewType();
-            let template = document.querySelector(`#templates ${view.templateSelector}`).cloneNode(true);
+            setImmediate(function() {
+                let view = new viewType();
+                let template = document.querySelector(`#templates ${view.templateSelector}`).cloneNode(true);
 
-            view.initialize(template, data);
+                view.initialize(template, data);
 
-            let contentRoot = document.querySelector("#content-root");
-            while (contentRoot.firstChild)
-            {
-                contentRoot.removeChild(contentRoot.firstChild);
-            }
-            contentRoot.appendChild(template);
+                let contentRoot = document.querySelector("#content-root");
+                while (contentRoot.firstChild)
+                {
+                    contentRoot.removeChild(contentRoot.firstChild);
+                }
+                contentRoot.appendChild(template);
+            });
         };
 
         this.initialize = initialize;
