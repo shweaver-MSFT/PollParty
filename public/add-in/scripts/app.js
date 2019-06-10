@@ -7,7 +7,7 @@
 
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
-            
+
             try {
                 // Check for existing state
                 let hasExistingState = true; // TODO: Query backend for existing state
@@ -17,7 +17,7 @@
 
                 if (isPresenting) {
                     if (!hasExistingState) {
-                        
+
                         // In a live presentation state, but missing configuration.
                         navigate(window.PollParty.Views.ErrorView, {
                             message: "You appear to be presenting a slide that has not yet been configured.",
@@ -25,7 +25,7 @@
                         });
                     }
                     else {
-                        
+
                         // Show the live presentation view.
                         navigate(window.PollParty.Views.LiveView, {
                             // TODO: Populate view with existing data
@@ -34,7 +34,7 @@
                 }
                 else {
                     if (!hasExistingState) {
-                        
+
                         // Show the Edit view, empty and ready for configuration
                         navigate(window.PollParty.Views.EditView);
                     }
@@ -57,7 +57,7 @@
                 });
             }
         };
-        
+
         /*
             Navigate the content-root to the specified view.
                 viewType: A type from window.PollParty.Views for display.
@@ -65,15 +65,14 @@
         */
         let navigate = function (viewType, data) {
 
-            setImmediate(function() {
+            setImmediate(function () {
                 let view = new viewType();
                 let template = document.querySelector(`#templates ${view.templateSelector}`).cloneNode(true);
 
                 view.initialize(template, data);
 
                 let contentRoot = document.querySelector("#content-root");
-                while (contentRoot.firstChild)
-                {
+                while (contentRoot.firstChild) {
                     contentRoot.removeChild(contentRoot.firstChild);
                 }
                 contentRoot.appendChild(template);
@@ -87,7 +86,8 @@
     // Create default namespace
     window.PollParty = {
         App: new PollPartyApp(),
-        Views: {}
+        Views: {},
+        Helpers: {}
     };
 
     // The initialize function must be run each time a new page is loaded.
