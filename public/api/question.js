@@ -9,6 +9,10 @@ class question {
         return this.questions.find(item => item.presentationId === presentationId && item.slideId === slideId);
     }
 
+    static getForPresentation(presentationId) {
+        return this.questions.find(item => item.presentationId === presentationId);
+    }
+
     static save(slideId, presentationId, text){
         this.questions.push({id: this.id + 1, slideId: slideId, presentationId: presentationId, text: text });
     }
@@ -30,8 +34,6 @@ question.questions = [{
     id: 1, 
     slideId: 1, 
     presentationId: 1, 
-    questionIndex: 1,
-    questionTotal: 1,
     text: "Poll Party Hello World?"}];
 
 module.exports = question;

@@ -8,14 +8,9 @@
             let joinCodeDiv = view.querySelector(".join-code");
             let questionCountDiv = view.querySelector(".question-count");
 
-            // Get the session data
-            let sessionData = {
-                joinCode: 1234,
-                questionTotal: 1,
-                currentQuestion: {
-                    questionIndex: 1
-                }
-            }; // TODO: Replace debug data with null
+            // TODO: Make API call to get/create session and get back the session data
+            
+
 
             let finishSetup = function () {
 
