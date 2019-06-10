@@ -44,12 +44,7 @@
                 // If no session, nav to error view
                 if (sessionData === null) {
                     window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
-                        message: "No valid session for the code provided.",
-                        showCommand: true,
-                        commandText: "Enter Code",
-                        commandCallback: function() {
-                            window.PollParty.App.navigate(window.PollParty.Views.CodeView);
-                        }
+                        message: "We couldn't find a session for the code provided. Please go back and re-enter the key.",
                     });
                     return;
                 }

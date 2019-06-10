@@ -16,12 +16,10 @@
             }
         */
         let initialize = function (view, data) {
-            
-            let commandButton = view.querySelector(".command-button");
-            let errorTextSpan = view.querySelector(".error-text");
 
-            // Disable the button during configuration
-            commandButton.disabled = true;
+            let codeButton = view.querySelector(".code-button");
+            let commandButton = view.querySelector(".command-button");
+            let errorTextSpan = view.querySelector(".description-text");
 
             if (data !== undefined) {
                 
@@ -29,10 +27,9 @@
                 errorTextSpan.innerText = data["message"];
 
                 // Configure the button
-                if (data["showButton"] === false) {
-                    commandButton.classList.add("hidden");
-                }
-                else {
+                if (data["showCommand"] === true) {
+                    
+                    commandButton.classList.remove("hidden");
                     commandButton.innerHTML = data["commandText"];
                     commandButton.addEventListener("click", function() {
                         data["commandCallback"]();
@@ -46,9 +43,11 @@
                     window.PollParty.App.initialize();
                 });
             }
-            
-            // Reenable the button post configuration
-            commandButton.disabled = false;
+
+            // Code button takes us to code view
+            codeButton.addEventListener("click", function() {
+                window.PollParty.App.navigate(window.PollParty.Views.CodeView);
+            });
         };
 
         this.initialize = initialize;

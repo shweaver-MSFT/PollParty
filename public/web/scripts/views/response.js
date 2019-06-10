@@ -44,10 +44,34 @@
             yesButton.disabled = true;
             noButton.disabled = true;
 
-            window.PollParty.App.navigate(window.PollParty.Views.ConfirmView, {
-                response: responseBool,
-                session: sessionData
+            // TODO: Add loading indicator
+
+            let url = `/api/session/${sessionData.code}/response/${responseBool}`;
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = "json";
+            xhr.open("POST", url);
+            xhr.addEventListener("load", function() {
+                if (xhr.status !== 200) {
+                    
+                    window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
+                        message: "Please try voting again, or go back and re-enter the key.",
+                        showButton: true,
+                        commandText: "Try Again",
+                        commandCallback: function() {
+
+                            // Recursive call to try again
+                            submitSelection(responseBool, sessionData);
+                        }
+                    });
+                    return;
+                }
+                
+                // Send to the confirm view to wait for the next question
+                window.PollParty.App.navigate(window.PollParty.Views.ConfirmView, {
+                    session: sessionData
+                });
             });
+            xhr.send();
         }
 
         this.initialize = initialize;
