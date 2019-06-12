@@ -12,7 +12,7 @@
             editButton.disabled = true;
 
             // Get the question data
-            let questionData = (data !== undefined) ? data.question : null;
+            let questionData = (data !== undefined) ? data.questionData : null;
 
             let finishSetup = function () {
 
@@ -21,7 +21,7 @@
                 }
 
                 // Configure question text
-                questionTextSpan.innerText = questionData.text;
+                questionTextSpan.innerText = questionData.currentQuestion.text;
 
                 // Configure edit button
                 editButton.disabled = false;
@@ -29,12 +29,12 @@
 
                     // Navigate to the edit view
                     window.PollParty.App.navigate(window.PollParty.Views.EditView, {
-                        question: questionData
+                        question: questionData.currentQuestion
                     });
                 });
 
                 // Configure question index and total
-                questionCountDiv.innerText = `${questionData.questionIndex}/${questionData.questionTotal}`;
+                questionCountDiv.innerText = `${questionData.currentQuestion.questionIndex}/${questionData.questionTotal}`;
             }
 
             if (questionData !== null) {
@@ -70,4 +70,4 @@
 
     window.PollParty.Views.StaticView = StaticView;
 
-})();
+})(); 

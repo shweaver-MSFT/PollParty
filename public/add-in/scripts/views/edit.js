@@ -1,4 +1,4 @@
-(function() {
+(function () {
     "use strict";
 
     let EditView = function () {
@@ -8,37 +8,38 @@
         let question = null;
 
         let initialize = function (view, data) {
-            
+
             viewInstance = view;
             let saveButton = viewInstance.querySelector(".save-button");
             let questionInputSpan = viewInstance.querySelector(".question-input");
-            
-            // Load in data immediately
-            question == null;
+
             if (data !== undefined) {
 
                 question = data.question;
                 questionInputSpan.innerText = question.text;
             }
             else {
+                // create new question
+                let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
+                let slideId = window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
 
                 question = {
-                    text: null,
-                    questionIndex: 1,
-                    questionTotal: 1
+                    presentationId: presentationId,
+                    slideId: slideId,
+                    text: null
                 };
             }
 
             // Update default state
             updatePlaceholder();
-            
+
             // Handle text input for our custom input field
             document.addEventListener("keypress", function (e) {
                 handleKeypress(e.keyCode);
             });
 
             // Handle save click
-            saveButton.addEventListener("click", function() {
+            saveButton.addEventListener("click", function () {
                 save();
             });
         };
@@ -49,10 +50,33 @@
             let questionText = questionInputSpan.innerText;
             question.text = questionText;
 
-            // Navigate to the static view
-            window.PollParty.App.navigate(window.PollParty.Views.StaticView, {
-                question: question
+            let url = `/api/question?pid=${question.presentationId}&sid=${question.slideId}&text=${question.text}`;
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = "json";
+            xhr.open("POST", url);
+            xhr.addEventListener("load", function () {
+                if (xhr.status !== 200) {
+                    window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
+                        message: "Error saving question, please try again.",
+                        showButton: true,
+                        commandText: "Try Again",
+                        commandCallback: function () {
+                            // Recursive call to try again
+                            save();
+                        }
+                    });
+                    return;
+                }
+
+                let questionData = xhr.response;
+
+                // Navigate to the static view
+                window.PollParty.App.navigate(window.PollParty.Views.StaticView, {
+                    questionData: questionData
+                });
             });
+
+            xhr.send();
         };
 
         function handleKeypress(charCode) {
@@ -64,7 +88,7 @@
                     save();
                     return;
                 }
-            
+
                 // Handle backspace
                 if (charCode === 8) {
                     questionInputSpan.innerText = questionInputSpan.innerText.slice(0, -1);
@@ -73,11 +97,11 @@
                     return;
                 }
             }
-            
+
             // Handle char keys
             let key = String.fromCharCode(charCode);
             var regex = /^[\x20-\x7F]*$/;
-            if(regex.test(key)) {
+            if (regex.test(key)) {
 
                 if (questionInputSpan.classList.contains("placeholder")) {
                     questionInputSpan.innerText = "";
@@ -89,7 +113,7 @@
         };
 
         function updatePlaceholder() {
-            
+
             let saveButton = viewInstance.querySelector(".save-button");
             let questionInputSpan = viewInstance.querySelector(".question-input");
 
