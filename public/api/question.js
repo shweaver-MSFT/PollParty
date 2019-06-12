@@ -1,6 +1,10 @@
 // Question class to store questions and question count.
 class question {
 
+    static getForPresentation(presentationId) {
+        return this.data.questions.find(item => item.presentationId === presentationId);
+    }
+
     static getById(id) {
         return this.data.questions.find(item => item.id == id);
     }

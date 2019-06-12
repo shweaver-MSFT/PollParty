@@ -113,6 +113,28 @@ app.get('*/api/session/:code', function (req, res) {
     return;
 });
 
+// Route for getting or creating a session based on presentation and slide ids.
+// Used when presenting live
+app.get('*/api/session/pid/:pid/sid/:sid', function (req, res) {
+    
+    try {
+        let presentationId = parseInt(req.params.pid);
+        let slideId = parseInt(req.params.sid);
+
+        let session = sessionData.getCreate(presentationId, slideId);
+        
+        res.statusCode = 200; // OK
+        res.json(session);
+    }
+    catch(e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+});
+
 // Route for adding responses to an active session
 app.post('*/api/session/:code/response/:response', function (req, res) {
 

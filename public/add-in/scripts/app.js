@@ -9,11 +9,44 @@
             navigate(window.PollParty.Views.LoadingView);
 
             try {
+
+                let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
+                let slideId = window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
+                
+                let url = `./api/session?pid=${presentationId}&sid=${slideId}`;
+                let xhr = new XMLHttpRequest();
+                xhr.responseType = "json";
+                xhr.open("GET", url);
+                xhr.addEventListener("load", function () {
+                    if (xhr.status !== 200) {
+                        finishSetup(null);
+                        return;
+                    }
+
+                    // 
+                    let data = xhr.response;
+                    finishSetup(data);
+                });
+                xhr.send();                
+            }
+            catch (e) {
+
+                // We've failed to load a view. Show an error message.
+                navigate(window.PollParty.Views.ErrorView, {
+                    exception: e,
+                    message: "We have encountered an error loading the Add-In. Please try again.",
+                    commandText: "Refresh",
+                    commandCallback: initialize
+                });
+            }
+
+            function finishSetup(state) {
+
                 // Check for existing state
-                let hasExistingState = true; // TODO: Query backend for existing state
+                let hasExistingState = state !== null;
 
                 // Check if presenting or not
-                let isPresenting = false; // TODO: Query Office.js to see if we are actively presenting
+                let isPresenting = window.PollParty.Helpers.PowerPointHelper.isPresenting;
 
                 if (isPresenting) {
                     if (!hasExistingState) {
@@ -28,7 +61,7 @@
 
                         // Show the live presentation view.
                         navigate(window.PollParty.Views.LiveView, {
-                            // TODO: Populate view with existing data
+                            session: state
                         });
                     }
                 }
@@ -45,16 +78,6 @@
                         navigate(window.PollParty.Views.StaticView);
                     }
                 }
-            }
-            catch (e) {
-
-                // We've failed to load a view. Show an error message.
-                navigate(window.PollParty.Views.ErrorView, {
-                    exception: e,
-                    message: "We have encountered an error loading the Add-In. Please try again.",
-                    commandText: "Refresh",
-                    commandCallback: initialize
-                });
             }
         };
 

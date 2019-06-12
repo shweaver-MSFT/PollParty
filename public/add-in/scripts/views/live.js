@@ -3,22 +3,62 @@
 
     let LiveView = function () {
 
+        const syncInterval = 1000;
+        
         let viewInstance = null;
+        let sessionData = null;
 
         let initialize = function (view, data) {
             viewInstance = view;
 
-            updateProgress("75%", "25%");
+            // Get the session data from the previous view
+            sessionData = data && data.session ? data.session : null;
+            if (sessionData === null) {
+
+                // TODO: Handle error
+                return;
+            }
+
+            let questionTextSpan = view.querySelector(".question-text");
+            questionTextSpan.innerText = sessionData.currentQuestion.text;
+
+            let joinCodeSpan = view.querySelector(".join-code");
+            joinCodeSpan.innerText = sessionData.code;
+
+            let questionCountSpan = view.querySelector(".question-count");
+            questionCountSpan.innerText = `${sessionData.currentQuestionIndex}/${sessionData.questionTotal}`;
+
+            updateProgress(0, 0);
+            setInterval(syncProgress, syncInterval);
         };
 
-        /* 
-            Pass in string percentages; e.g. "25%" Preferrably adding up to 100% total.
-            This string is used to populate the span inner text as well 
-            as the progress width value.
+        function syncProgress() {
 
-            TODO: Make this function more reliable. It's mostly for demo use currently.
-        */
-        function updateProgress(yesPercentString, noPercentString) {
+            let url = `./api/session?code=${sessionData.code}`;
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = "json";
+            xhr.open("GET", url);
+            xhr.addEventListener("load", function () {
+                if (xhr.status !== 200) {
+                    return;
+                }
+
+                // 
+                sessionData = xhr.response;
+                
+                let yesCount = sessionData.currentResponses.yes;
+                let noCount = sessionData.currentResponses.no;
+                updateProgress(yesCount, noCount);
+            });
+            xhr.send();
+        }
+
+        function updateProgress(yesCount, noCount) {
+
+            let totalCount = yesCount + noCount;
+            let yesPercentString = (yesCount / totalCount) + "%";
+            let noPercentString = (noCount / totalCount) + "%";
+
             let yesProgressBar = viewInstance.querySelector(".answer-yes .meter .progress");
             let yesPercentSpan = viewInstance.querySelector(".answer-yes .percent-text");
             let noProgressBar = viewInstance.querySelector(".answer-no .meter .progress");
@@ -32,18 +72,13 @@
             yesPercentSpan.style.fontWeight = "normal";
             noPercentSpan.style.fontWeight = "normal";
 
+            // TODO: Replace hard style setters with a css class
             if (yesProgressBar.style.width > noProgressBar.style.width) {
                 yesPercentSpan.style.fontWeight = "bold";
             } else if (yesProgressBar.style.width < noProgressBar.style.width) {
                 noPercentSpan.style.fontWeight = "bold";
             }
-        };
-
-        function updateNoProgress(percentString) {
-            let noProgressBar = viewInstance.querySelector(".answer-no .meter .progress");
-            let noPercentSpan = viewInstance.querySelector(".answer-no .percent-text");
-            
-        };
+        }
 
         this.initialize = initialize;
         this.templateSelector = ".live.view";
