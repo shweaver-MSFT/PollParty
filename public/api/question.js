@@ -5,29 +5,40 @@ class question {
         return this.data.questions.find(item => item.id == id);
     }
 
+    // returns current question and total questions count.
     static get(presentationId, slideId) {
-        return this.data.questions.find(item => item.presentationId === presentationId && item.slideId === slideId);
+        var question = this.data.questions.find(item => item.presentationId === presentationId && item.slideId === slideId);
+        return { questionTotal: this.data.questionTotal, currentQuestion: question };
     }
 
-    static save(presentationId, slideId, text, questionIndex) {
-        let item = this.get(presentationId, slideId);
-        if (item === null) {
+    // returns current question
+    static getCurrentQuestion(presentationId, slideId) {
+        var question = this.data.questions.find(item => item.presentationId === presentationId && item.slideId === slideId);
+        return question;
+    }
+
+
+    static save(presentationId, slideId, text) {
+        let question = this.getCurrentQuestion(presentationId, slideId);
+
+        this.data.questionTotal = this.data.questionTotal + 1;
+        if (question === null || question === undefined) {
             // create new
-            this.data.questions.push({
-                id: slideId + presentationId,
+            question = {
+                id: presentationId + '-' + slideId,
                 slideId: slideId,
                 presentationId: presentationId,
                 text: text,
-                questionIndex: questionIndex
-            });
+                questionIndex: this.data.questionTotal
+            };
+            this.data.questions.push(question);
         }
         else {
             //update
-            item.text = text;
-            item.questionIndex = questionIndex;
+            question.text = text;
         }
-        this.data.questionTotal = questionTotal + 1;
-        return { questionTotal: this.data.questionTotal, currentQuestion: item };
+
+        return { questionTotal: this.data.questionTotal, currentQuestion: question };
     }
 }
 

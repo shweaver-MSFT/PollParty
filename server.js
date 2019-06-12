@@ -15,10 +15,10 @@ app.use(bodyParser.json())
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Audience experience
-app.get('/web', function(req, res) {
-    
+app.get('/web', function (req, res) {
+
     let fileName = path.join(__dirname, '/public/web', 'index.html');
-    fs.readFile(fileName, function(err, data) {
+    fs.readFile(fileName, function (err, data) {
         res.statusCode = 200;
         res.write(data);
         res.end();
@@ -26,9 +26,9 @@ app.get('/web', function(req, res) {
 });
 
 // Presenter experience
-app.get('/add-in', function(req, res) {
+app.get('/add-in', function (req, res) {
     let fileName = path.join(__dirname, '/public/add-in', 'index.html');
-    fs.readFile(fileName, function(err, data) {
+    fs.readFile(fileName, function (err, data) {
         res.statusCode = 200; // OK
         res.write(data);
         res.end();
@@ -36,8 +36,8 @@ app.get('/add-in', function(req, res) {
 });
 
 // routes for question CRUD operations
-app.get('*/api/question', function(req, res) {
-    
+app.get('*/api/question', function (req, res) {
+
     try {
         let presentationId = parseInt(req.query.pid);
         let slideId = parseInt(req.query.sid);
@@ -52,7 +52,33 @@ app.get('*/api/question', function(req, res) {
         res.statusCode = 200; // OK
         res.json(question);
     }
-    catch(e) {
+    catch (e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+})
+
+app.post('*/api/question', function (req, res) {
+
+    try {
+        let presentationId = parseInt(req.query.pid);
+        let slideId = parseInt(req.query.sid);
+        let questionText = req.query.text;
+
+        // Question id is simple combination of presentation id and slide id
+        let questionData = questionData.save(presentationId, slideId, questionText);
+
+        if (questionData === null) {
+            res.statusCode = 204; // No Content
+        }
+
+        res.statusCode = 200; // OK
+        res.json(questionData);
+    }
+    catch (e) {
         res.statusCode = 500; // Internal server error
         console.log(e);
     }
@@ -62,7 +88,7 @@ app.get('*/api/question', function(req, res) {
 })
 
 // route for getting a session by code
-app.get('*/api/session/:code', function(req, res) {
+app.get('*/api/session/:code', function (req, res) {
 
     try {
         let code = parseInt(req.params.code);
@@ -76,7 +102,7 @@ app.get('*/api/session/:code', function(req, res) {
         res.statusCode = 200; // OK
         res.json(session);
     }
-    catch(e) {
+    catch (e) {
         res.statusCode = 500; // Internal server error
         console.log(e);
     }
@@ -84,12 +110,12 @@ app.get('*/api/session/:code', function(req, res) {
         res.end();
     }
 
-    return;    
+    return;
 });
 
 // Route for adding responses to an active session
 app.post('*/api/session/:code/response/:response', function (req, res) {
-    
+
     try {
         let code = parseInt(req.params.code);
         let response = parseInt(req.params.response);
@@ -102,7 +128,7 @@ app.post('*/api/session/:code/response/:response', function (req, res) {
 
         res.statusCode = 200; // OK
     }
-    catch(e) {
+    catch (e) {
         res.statusCode = 500; // Internal server error
         console.log(e);
     }
