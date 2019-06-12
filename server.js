@@ -39,7 +39,7 @@ app.get('/add-in', function (req, res) {
 app.get('*/api/question', function (req, res) {
 
     try {
-        let presentationId = parseInt(req.query.pid);
+        let presentationId = req.query.pid;
         let slideId = parseInt(req.query.sid);
 
         // Question id is simple combination of presentation id and slide id
@@ -64,19 +64,19 @@ app.get('*/api/question', function (req, res) {
 app.post('*/api/question', function (req, res) {
 
     try {
-        let presentationId = parseInt(req.query.pid);
+        let presentationId = req.query.pid;
         let slideId = parseInt(req.query.sid);
         let questionText = req.query.text;
 
         // Question id is simple combination of presentation id and slide id
-        let questionData = questionData.save(presentationId, slideId, questionText);
+        let result = questionData.save(presentationId, slideId, questionText);
 
-        if (questionData === null) {
+        if (result === null) {
             res.statusCode = 204; // No Content
         }
 
         res.statusCode = 200; // OK
-        res.json(questionData);
+        res.json(result);
     }
     catch (e) {
         res.statusCode = 500; // Internal server error
@@ -116,17 +116,17 @@ app.get('*/api/session/:code', function (req, res) {
 // Route for getting or creating a session based on presentation and slide ids.
 // Used when presenting live
 app.get('*/api/session/pid/:pid/sid/:sid', function (req, res) {
-    
+
     try {
-        let presentationId = parseInt(req.params.pid);
+        let presentationId = req.params.pid;
         let slideId = parseInt(req.params.sid);
 
         let session = sessionData.getCreate(presentationId, slideId);
-        
+
         res.statusCode = 200; // OK
         res.json(session);
     }
-    catch(e) {
+    catch (e) {
         res.statusCode = 500; // Internal server error
         console.log(e);
     }
