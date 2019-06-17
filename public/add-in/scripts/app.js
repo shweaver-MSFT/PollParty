@@ -3,7 +3,7 @@
 
     let PollPartyApp = function () {
 
-        let initialize = function () {
+        let initialize = async function () {
 
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
@@ -11,7 +11,7 @@
             try {
 
                 let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
-                let slideId = window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
                 
                 let url = `./api/session?pid=${presentationId}&sid=${slideId}`;
                 let xhr = new XMLHttpRequest();
@@ -40,13 +40,13 @@
                 });
             }
 
-            function finishSetup(state) {
+            async function finishSetup(state) {
 
                 // Check for existing state
                 let hasExistingState = state !== null;
 
                 // Check if presenting or not
-                let isPresenting = window.PollParty.Helpers.PowerPointHelper.isPresenting;
+                let isPresenting = await window.PollParty.Helpers.PowerPointHelper.isPresenting;
 
                 if (isPresenting) {
                     if (!hasExistingState) {

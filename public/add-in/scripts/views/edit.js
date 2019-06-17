@@ -7,7 +7,7 @@
         let viewInstance = null;
         let question = null;
 
-        let initialize = function (view, data) {
+        let initialize = async function (view, data) {
 
             viewInstance = view;
             let saveButton = viewInstance.querySelector(".save-button");
@@ -21,7 +21,7 @@
             else {
                 // create new question
                 let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
-                let slideId = window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
 
                 question = {
                     presentationId: presentationId,

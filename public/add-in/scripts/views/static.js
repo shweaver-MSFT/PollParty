@@ -3,7 +3,7 @@
 
     let StaticView = function () {
 
-        let initialize = function (view, data) {
+        let initialize = async function (view, data) {
 
             let editButton = view.querySelector(".command-button");
             let questionTextSpan = view.querySelector(".question-text");
@@ -44,7 +44,7 @@
                 // Attempt to retrieve the question from the backend 
                 // using the presentation id and slide id
                 let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
-                let slideId = window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
 
                 let url = `./api/question?pid=${presentationId}&sid=${slideId}`;
 

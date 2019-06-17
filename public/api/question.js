@@ -24,10 +24,10 @@ class question {
 
     static save(presentationId, slideId, text) {
         let question = this.getCurrentQuestion(presentationId, slideId);
-
-        this.data.questionTotal = this.data.questionTotal + 1;
+        
         if (question === null || question === undefined) {
             // create new
+            this.data.questionTotal = this.data.questionTotal + 1;
             question = {
                 id: presentationId + '-' + slideId,
                 slideId: slideId,

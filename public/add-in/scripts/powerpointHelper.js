@@ -4,35 +4,33 @@
     let PowerPointHelper = function () {
 
         let isPresenting = function () {
-            var isPresenting = false;
-            Office.context.document.getActiveViewAsync(function (asyncResult) {
-                if (asyncResult.status === "failed") {
-                    console.log("Action getActiveViewAsync failed with error: " + asyncResult.error.message);
-                }
-                else {
-                    isPresenting = asyncResult.value === "read";
-                }
+            return new Promise(resolve => {
+                Office.context.document.getActiveViewAsync(function (asyncResult) {
+                    if (asyncResult.status === "failed") {
+                        console.log("Action getActiveViewAsync failed with error: " + asyncResult.error.message);
+                    }
+                    else {
+                        var isPresenting = asyncResult.value === "read";
+                        resolve(isPresenting);
+                    }
+                });
             });
-
-            return isPresenting;
-        }
+        };
 
         let getSelectedSlideId = function () {
-            return getSelectedSlide().id;
-        }
-
-        function getSelectedSlide() {
-            var slide = {};
-            Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, function (asyncResult) {
-                if (asyncResult.status == "failed") {
-                    console.log("Action getSelectedDataAsync failed with error: " + asyncResult.error.message);
-                }
-                else {
-                    slide = asyncResult.value.slides[0];
-                }
+            return new Promise(resolve => {
+                Office.context.document.getSelectedDataAsync(Office.CoercionType.SlideRange, function (asyncResult) {
+                    if (asyncResult.status === "failed") {
+                        console.log("Action getSelectedDataAsync failed with error: " + asyncResult.error.message);
+                    }
+                    else {
+                        var slideId = asyncResult.value.slides[0].id;
+                        resolve(slideId);
+                    }
+                });
             });
-            return slide;
-        }
+        };
+
 
         // Get unique id of powerpoint document. 
         // Currently, didnt find any unique powerpoint document identifier we could use, so creating a unique guid and storing it in document settings 
@@ -40,13 +38,13 @@
             // check if a unique id already exists, if not create one
             var uniqueDocumentId = Office.context.document.settings.get("PresentationId");
             if (uniqueDocumentId === null) {
-                var uuid = window.PollParty.Helpers.UuidGenerator.uuidv4Crypto();
-                Office.context.document.settings.set("PresentationId", uuid);
+                var uniqueDocumentId = window.PollParty.Helpers.UuidGenerator.uuidv4Crypto();
+                Office.context.document.settings.set("PresentationId", uniqueDocumentId);
                 // persist settings
-                Office.context.document.settings.saveAsync(result => console.log("Save Setting Presentation Id: " + result));
+                Office.context.document.settings.saveAsync(result => console.log("Save Setting Presentation Id: " + result.status));
             }
             return uniqueDocumentId;
-        }
+        };
 
         this.isPresenting = isPresenting;
         this.getPresentationId = getPresentationId;
