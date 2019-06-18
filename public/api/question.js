@@ -2,7 +2,7 @@
 class question {
 
     static getForPresentation(presentationId) {
-        return this.data.questions.find(item => item.presentationId === presentationId);
+        return this.data.questions.filter(item => item.presentationId === presentationId);
     }
 
     static getById(id) {
@@ -24,7 +24,7 @@ class question {
 
     static save(presentationId, slideId, text) {
         let question = this.getCurrentQuestion(presentationId, slideId);
-        
+
         if (question === null || question === undefined) {
             // create new
             this.data.questionTotal = this.data.questionTotal + 1;

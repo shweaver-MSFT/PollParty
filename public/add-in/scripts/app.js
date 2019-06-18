@@ -12,8 +12,8 @@
 
                 let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
                 let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
-                
-                let url = `./api/session?pid=${presentationId}&sid=${slideId}`;
+
+                let url = `./api/session/pid/${presentationId}/sid/${slideId}`;
                 let xhr = new XMLHttpRequest();
                 xhr.responseType = "json";
                 xhr.open("GET", url);
@@ -27,7 +27,7 @@
                     let data = xhr.response;
                     finishSetup(data);
                 });
-                xhr.send();                
+                xhr.send();
             }
             catch (e) {
 
@@ -46,7 +46,7 @@
                 let hasExistingState = state !== null;
 
                 // Check if presenting or not
-                let isPresenting = await window.PollParty.Helpers.PowerPointHelper.isPresenting;
+                let isPresenting = await window.PollParty.Helpers.PowerPointHelper.isPresenting();
 
                 if (isPresenting) {
                     if (!hasExistingState) {
@@ -101,6 +101,18 @@
                 contentRoot.appendChild(template);
             });
         };
+
+        // function activeViewChanged(args) {
+        //     initialize();
+        // }
+
+
+        // Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, activeViewChanged,
+        //     function (asyncResult) {
+        //         if (asyncResult.status === "failed") {
+        //             console.log("Action failed with error: " + asyncResult.error.message);
+        //         }
+        //     });
 
         this.initialize = initialize;
         this.navigate = navigate;

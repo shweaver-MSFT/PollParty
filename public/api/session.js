@@ -2,10 +2,10 @@
 const randomize = require('randomatic');
 const questionsData = require('./question');
 
-class session {     
+class session {
 
     // Get question from session id and slide id
-    static joinSession(sessionId, slideId){
+    static joinSession(sessionId, slideId) {
         var presentationId = this.get(sessionId).presentationId;
         var currentQuestion = questionsData.get(slideId, presentationId);
         return currentQuestion.text;
@@ -17,20 +17,20 @@ class session {
         var currentQuestion = questionsData.get(slideId, session.presentationId).text; 
         return {question: currentQuestion, responseCountYes: session.responses.yes, responseCountNo: session.responses.no};
     }*/
-    
+
     // delete all sessions with session id
     /*static delete(sessionId){
         this.sessions = this.sessions.filter(s => s.sessionId != sessionId);
-    }*/ 
+    }*/
 
     // update session with each response
-    static addResponse(sessionId, response){
+    static addResponse(sessionId, response) {
         var sessionData = session.get(sessionId);
-        if(sessionData !== null) {
-            if(response == true){
-                sessionData.currentResponses.yes++; 
+        if (sessionData !== null) {
+            if (response == true) {
+                sessionData.currentResponses.yes++;
             }
-            else{
+            else {
                 sessionData.currentResponses.no++;
             }
             return true;
@@ -39,16 +39,23 @@ class session {
     }
 
     // Get a session by id/code
-    static get(sessionId){
-        return this.sessions.find(session => session.code == sessionId);         
-    }    
+    static get(sessionId) {
+        return this.sessions.find(session => session.code == sessionId);
+    }
 
     // Get an existing session for a presentation. If none, create a new one.
     static getCreate(presentationId, slideId) {
 
+        // Get questions from question API associated with this presentationId
+        let questions = questionsData.getForPresentation(presentationId);
+
+        // no questions found
+        if (questions.length === 0)
+            return null;
+
         let sessionData = this.sessions.find((s) => s.presentationId == presentationId);
 
-        if (sessionData === null) {
+        if (sessionData === undefined) {
 
             sessionData = {
                 code: randomize('0', 4),
@@ -63,9 +70,6 @@ class session {
             };
         }
 
-        // Get questions from question API associated with this presentationId
-        let questions = questionsData.getForPresentation(presentationId);
-
         // Assign the current question based upon the slideId
         let currentQuestion = questions.find((q) => q.slideId === slideId);
 
@@ -74,17 +78,17 @@ class session {
         sessionData.currentQuestion = currentQuestion;
 
         return sessionData;
-    }  
+    }
 }
 
 session.sessions = [{
     code: 1234, // Let's use a 4 digit code as the sessionId, instead of a guid.
-    presentationId: 1, 
+    presentationId: 1,
     questionTotal: 1,
     currentQuestionIndex: 1,
     currentQuestion: {
-        id: 1, 
-        slideId: 1, 
+        id: 1,
+        slideId: 1,
         presentationId: 1,
         text: "Poll Party Hello World?",
     },
