@@ -1,4 +1,8 @@
 // session class exposing CRUD operations to create, read, update, delete sessions
+// A unique session is created when the powerpoint is being presented and the presenter/teacher is on a slide with a content add- in question.
+// todo- Currently a new session is created each time, we need to update to have one session for all questions when teacher starts presenting.
+// Session  stores responses information from audience.
+
 const randomize = require('randomatic');
 const questionsData = require('./question');
 

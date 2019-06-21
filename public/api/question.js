@@ -1,4 +1,6 @@
 // Question class to store questions and question count.
+// A question is identified to belong to a particular office document based on unique combination of presentation id and slide id.
+
 class question {
 
     static getForPresentation(presentationId) {
