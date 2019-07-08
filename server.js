@@ -68,6 +68,8 @@ app.post('*/api/question', function (req, res) {
         let slideId = parseInt(req.query.sid);
         let questionText = req.query.text;
 
+        
+
         // Question id is simple combination of presentation id and slide id
         let result = questionData.save(presentationId, slideId, questionText);
 
@@ -120,7 +122,7 @@ app.get('*/api/session/pid/:pid/sid/:sid', function (req, res) {
     try {
         let presentationId = req.params.pid;
         let slideId = parseInt(req.params.sid);
-
+        
         let session = sessionData.getCreate(presentationId, slideId);
 
         res.statusCode = 200; // OK

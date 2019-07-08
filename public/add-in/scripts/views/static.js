@@ -43,8 +43,8 @@
             else {
                 // Attempt to retrieve the question from the backend 
                 // using the presentation id and slide id
-                let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
-                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
+                let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
 
                 let url = `./api/question?pid=${presentationId}&sid=${slideId}`;
 

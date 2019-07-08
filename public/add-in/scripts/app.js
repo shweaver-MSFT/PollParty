@@ -8,11 +8,11 @@
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
 
+            await Office.onReady();
+
             try {
-
-                let presentationId = window.PollParty.Helpers.PowerPointHelper.getPresentationId();
-                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideId();
-
+                let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
                 let url = `./api/session/pid/${presentationId}/sid/${slideId}`;
                 let xhr = new XMLHttpRequest();
                 xhr.responseType = "json";
@@ -30,7 +30,6 @@
                 xhr.send();
             }
             catch (e) {
-
                 // We've failed to load a view. Show an error message.
                 navigate(window.PollParty.Views.ErrorView, {
                     exception: e,
@@ -46,7 +45,7 @@
                 let hasExistingState = state !== null;
 
                 // Check if presenting or not
-                let isPresenting = await window.PollParty.Helpers.PowerPointHelper.isPresenting();
+                let isPresenting = await window.PollParty.Helpers.PowerPointHelper.isPresentingAsync();
 
                 if (isPresenting) {
                     if (!hasExistingState) {
@@ -127,7 +126,7 @@
 
     // The initialize function must be run each time a new page is loaded.
     if (Office && typeof PowerPoint !== 'undefined') {
-        Office.initialize = window.PollParty.App.initialize;
+        window.PollParty.App.initialize();
     }
     else {
         window.addEventListener('DOMContentLoaded', window.PollParty.App.initialize);
