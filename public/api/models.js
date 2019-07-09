@@ -71,6 +71,7 @@
 
         let code = 1234;// TODO: GenCode here
         let responseSet = new ResponseSet();
+        let currentQuestion = null;
 
         function respond(slideId, responseBool) {
             let response = new Response(slideId, responseBool);
@@ -79,6 +80,7 @@
 
         this.presentationId = presentationId;
         this.code = code;
+        this.currentQuestion = currentQuestion;
         this.responseSet = responseSet;
         this.respond = respond;
     };

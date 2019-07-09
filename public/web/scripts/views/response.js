@@ -9,8 +9,8 @@
             
             viewInstance = view;
 
-            let sessionData = data !== undefined ? data.session : null;
-            if (sessionData !== null && sessionData !== undefined) {
+            let sessionData = data;
+            if (sessionData) {
 
                 let questionData = sessionData.currentQuestion;
                 if (questionData !== null && questionData !== undefined) {
@@ -46,7 +46,7 @@
 
             // TODO: Add loading indicator
 
-            let url = `/api/session/${sessionData.code}/response/${responseBool}`;
+            let url = `/api/session/${sessionData.code}?response=${responseBool}`;
             let xhr = new XMLHttpRequest();
             xhr.responseType = "json";
             xhr.open("POST", url);

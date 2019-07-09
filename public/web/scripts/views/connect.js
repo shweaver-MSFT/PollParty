@@ -53,9 +53,7 @@
                 let statusText = view.querySelector(".status-text");
                 statusText.innerText = "Connected";
 
-                window.PollParty.App.navigate(window.PollParty.Views.ResponseView, {
-                    session: sessionData
-                });
+                window.PollParty.App.navigate(window.PollParty.Views.ResponseView, sessionData);
             }
         };
 

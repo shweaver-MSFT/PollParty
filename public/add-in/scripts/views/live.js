@@ -23,10 +23,11 @@
             
             let sessionData = await new Promise(function(resolve, reject) {
 
-                let url = `./api/session/create?pid=${questionSet.presentationId}`;
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
+                let url = `./api/session/live?pid=${questionSet.presentationId}&sid=${slideId}`;
                 let xhr = new XMLHttpRequest();
                 xhr.responseType = "json";
-                xhr.open("POST", url);
+                xhr.open("GET", url);
                 xhr.addEventListener("load", function () {
                     if (xhr.status !== 200) {
     
@@ -40,8 +41,8 @@
                 xhr.send();
             });
 
-            let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-            let currentQuestion = questionSet.questions.find((q) => q.slideId == slideId);
+            let activeSlideId = sessionData.activeSlideId;
+            let currentQuestion = questionSet.questions.find((q) => q.slideId == activeSlideId);
             let questionText = currentQuestion.questionText;
             let questionIndex = questionSet.questions.indexOf(currentQuestion);
             let questionTotal = questionSet.questions.length;
