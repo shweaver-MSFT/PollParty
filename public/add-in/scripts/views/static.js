@@ -13,16 +13,13 @@
 
             // Get the current question
             let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-            console.log(slideId);
-            console.log(JSON.stringify(data));
-
             let question = data.questions.find((q) => q.slideId == slideId);
 
             if (question) {
                 // Set question text
                 questionTextSpan.innerText = question.questionText;
             }
-            
+
             // Configure edit button
             editButton.disabled = false;
             editButton.addEventListener("click", function () {

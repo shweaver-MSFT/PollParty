@@ -37,12 +37,51 @@
         this.getBySlideId = getBySlideId;
     };
 
-    let Session = function(presentationId) {
+    let Response = function(slideId, responseBool) {
 
-        let questionSet = new QuestionSet(presentationId);
-        let code = null;// TODO: GetCode here
-        //let responses = []
+        this.slideId = slideId;
+        this.responseBool = responseBool;
     };
 
-    module.exports = { Question, QuestionSet, Session };
+    let ResponseSet = function() {
+
+        let responses = [];
+        let trueCount = 0;
+        let falseCount = 0;
+        
+        function addResponse(response) {
+            
+            responses.push(response);
+
+            if (response.responseBool == true) {
+                trueCount++;
+            }
+            else {
+                falseCount++;
+            }
+        }
+
+        this.responses = responses;
+        this.trueCount = trueCount;
+        this.falseCount = falseCount;
+        this.addResponse = addResponse;
+    };
+
+    let Session = function(presentationId) {
+
+        let code = 1234;// TODO: GenCode here
+        let responseSet = new ResponseSet();
+
+        function respond(slideId, responseBool) {
+            let response = new Response(slideId, responseBool);
+            responseSet.addResponse(response);
+        }
+
+        this.presentationId = presentationId;
+        this.code = code;
+        this.responseSet = responseSet;
+        this.respond = respond;
+    };
+
+    module.exports = { Question, QuestionSet, Response, ResponseSet, Session };
 })();

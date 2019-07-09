@@ -36,8 +36,8 @@ app.get('/add-in', function (req, res) {
 });
 
 // routes for question CRUD operations
-app.get('*/api/question', function (req, res) {
-
+//app.get('*/api/question', function (req, res) {
+/*
     try {
         let presentationId = req.query.pid;
         let slideId = parseInt(req.query.sid);
@@ -60,9 +60,9 @@ app.get('*/api/question', function (req, res) {
         res.end();
     }
 })
-
-app.post('*/api/question', function (req, res) {
-
+*/
+//app.post('*/api/question', function (req, res) {
+/*
     try {
         let presentationId = req.query.pid;
         let slideId = parseInt(req.query.sid);
@@ -87,38 +87,12 @@ app.post('*/api/question', function (req, res) {
     finally {
         res.end();
     }
-})
-
-// route for getting a session by code
-app.get('*/api/session/:code', function (req, res) {
-
-    try {
-        let code = parseInt(req.params.code);
-
-        let session = sessionData.get(code);
-        if (session === null) {
-            res.statusCode = 204; // No Content
-            return;
-        }
-
-        res.statusCode = 200; // OK
-        res.json(session);
-    }
-    catch (e) {
-        res.statusCode = 500; // Internal server error
-        console.log(e);
-    }
-    finally {
-        res.end();
-    }
-
-    return;
 });
-
+*/
 // Route for getting or creating a session based on presentation and slide ids.
 // Used when presenting live
-app.get('*/api/session/pid/:pid/sid/:sid', function (req, res) {
-
+//app.get('*/api/session/pid/:pid/sid/:sid', function (req, res) {
+/*
     try {
         let presentationId = req.params.pid;
         let slideId = parseInt(req.params.sid);
@@ -136,10 +110,10 @@ app.get('*/api/session/pid/:pid/sid/:sid', function (req, res) {
         res.end();
     }
 });
-
+*/
 // Route for adding responses to an active session
-app.post('*/api/session/:code/response/:response', function (req, res) {
-
+//app.post('*/api/session/:code/response/:response', function (req, res) {
+/*
     try {
         let code = parseInt(req.params.code);
         let response = parseInt(req.params.response);
@@ -160,7 +134,7 @@ app.post('*/api/session/:code/response/:response', function (req, res) {
         res.end();
     }
 });
-
+*/
 /*
 // TODO: this may change, testing api, update as needed
 res.setHeader('Content-Type', 'application/json');  
@@ -204,8 +178,6 @@ app.get('*/api/questions/pid/:pid', function (req, res) {
         if (questionSet !== undefined) {
             res.statusCode = 200; // OK
             res.json(questionSet);
-            console.log("200 OK");
-            console.log(JSON.stringify(questionSet));
         }
         else {
             res.statusCode = 204; // No Content
@@ -241,11 +213,9 @@ app.post('*/api/question/save', function (req, res) {
         else {
             questionSet.addUpdateQuestion(slideId, questionText);
         }
-        console.log(JSON.stringify(questionSet));
 
         res.statusCode = 200; // OK
         res.json(questionSet);
-        console.log("200 OK");
     }
     catch (e) {
         res.statusCode = 500; // Internal server error
@@ -254,13 +224,58 @@ app.post('*/api/question/save', function (req, res) {
     finally {
         res.end();
     }
-})
+});
+
+// Create a new session for a live presentation
+app.post('*/api/session/create', function (req, res) {
+
+    try {
+        let presentationId = req.query.pid;
+        let session = new Models.Session(presentationId);
+        state.sessions.push(session);
+
+        console.log(`POST */api/session/create/pid/${presentationId}`);
+
+        res.statusCode = 200; // OK
+        res.json(session);
+    }
+    catch (e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+});
 
 
+// Get a session by code
+app.get('*/api/session/:code', function (req, res) {
 
+    try {
+        let code = req.params.code;
+        let session = state.sessions.find((s) => s.code == code);
 
+        console.log(`GET */api/session/${code}`);
 
+        if (session === null) {
+            res.statusCode = 204; // No Content
+            return;
+        }
 
+        res.statusCode = 200; // OK
+        res.json(session);
+    }
+    catch (e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+
+    return;
+});
 
 const server = http.createServer(app);
 server.listen(port, hostname, () => {

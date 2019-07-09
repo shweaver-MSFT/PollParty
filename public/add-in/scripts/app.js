@@ -58,9 +58,7 @@
                     else {
 
                         // Show the live presentation view.
-                        navigate(window.PollParty.Views.LiveView, {
-                            session: state
-                        });
+                        navigate(window.PollParty.Views.LiveView, state);
                     }
                 }
                 else {

@@ -7,26 +7,54 @@
         
         let viewInstance = null;
         let sessionData = null;
+        let questionSet = null;
 
-        let initialize = function (view, data) {
+        let initialize = async function (view, data) {
             viewInstance = view;
 
             // Get the session data from the previous view
-            sessionData = data && data.session ? data.session : null;
-            if (sessionData === null) {
+            if (!data) {
 
-                // TODO: Handle error
+                // TODO: handle error case
                 return;
             }
 
-            let questionTextSpan = view.querySelector(".question-text");
-            questionTextSpan.innerText = sessionData.currentQuestion.text;
+            questionSet = data;
+            
+            let sessionData = await new Promise(function(resolve, reject) {
 
-            let joinCodeSpan = view.querySelector(".join-code");
-            joinCodeSpan.innerText = sessionData.code;
+                let url = `./api/session/create?pid=${questionSet.presentationId}`;
+                let xhr = new XMLHttpRequest();
+                xhr.responseType = "json";
+                xhr.open("POST", url);
+                xhr.addEventListener("load", function () {
+                    if (xhr.status !== 200) {
+    
+                        // TODO: Handle error
+                        reject();
+                        return;
+                    }
+    
+                    resolve(xhr.response);
+                });
+                xhr.send();
+            });
 
-            let questionCountSpan = view.querySelector(".question-count");
-            questionCountSpan.innerText = `${sessionData.currentQuestionIndex}/${sessionData.questionTotal}`;
+            let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
+            let currentQuestion = questionSet.questions.find((q) => q.slideId == slideId);
+            let questionText = currentQuestion.questionText;
+            let questionIndex = questionSet.questions.indexOf(currentQuestion);
+            let questionTotal = questionSet.questions.length;
+            let code = sessionData.code;
+
+            let questionTextSpan = viewInstance.querySelector(".question-text");
+            questionTextSpan.innerText = questionText;
+
+            let joinCodeSpan = viewInstance.querySelector(".join-code");
+            joinCodeSpan.innerText = code;
+
+            let questionCountSpan = viewInstance.querySelector(".question-count");
+            questionCountSpan.innerText = `${questionIndex + 1}/${questionTotal}`;
 
             updateProgress(0, 0);
             setInterval(syncProgress, syncInterval);
@@ -34,21 +62,22 @@
 
         function syncProgress() {
 
-            let url = `./api/session?code=${sessionData.code}`;
+            let url = `./api/session/${sessionData.code}`;
             let xhr = new XMLHttpRequest();
             xhr.responseType = "json";
             xhr.open("GET", url);
             xhr.addEventListener("load", function () {
                 if (xhr.status !== 200) {
+
+                    // TODO: Handle error
                     return;
                 }
 
-                // 
                 sessionData = xhr.response;
                 
-                let yesCount = sessionData.currentResponses.yes;
-                let noCount = sessionData.currentResponses.no;
-                updateProgress(yesCount, noCount);
+                let trueCount = parseInt(sessionData.responseSet.trueCount);
+                let falseCount = parseInt(sessionData.responseSet.falseCount);
+                updateProgress(trueCount, falseCount);
             });
             xhr.send();
         }
@@ -56,8 +85,8 @@
         function updateProgress(yesCount, noCount) {
 
             let totalCount = yesCount + noCount;
-            let yesPercentString = (yesCount / totalCount) + "%";
-            let noPercentString = (noCount / totalCount) + "%";
+            let yesPercentString = (totalCount > 0 ? (yesCount / totalCount) : 0) + "%";
+            let noPercentString = (totalCount > 0 ? (noCount / totalCount) : 0) + "%";
 
             let yesProgressBar = viewInstance.querySelector(".answer-yes .meter .progress");
             let yesPercentSpan = viewInstance.querySelector(".answer-yes .percent-text");
