@@ -5,7 +5,6 @@
 
         const placeholderText = "Type Your Question";
         let viewInstance = null;
-        let question = null;
 
         let initialize = async function (view, data) {
 
@@ -13,21 +12,11 @@
             let saveButton = viewInstance.querySelector(".save-button");
             let questionInputSpan = viewInstance.querySelector(".question-input");
 
-            if (data !== undefined) {
+            if (data) {
 
-                question = data.question;
-                questionInputSpan.innerText = question.text;
-            }
-            else {
-                // create new question
-                let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
                 let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-
-                question = {
-                    presentationId: presentationId,
-                    slideId: slideId,
-                    text: null
-                };
+                let question = data.questions.find((q) => q.slideId == slideId);
+                questionInputSpan.innerText = question.questionText;
             }
 
             // Update default state
@@ -40,17 +29,18 @@
 
             // Handle save click
             saveButton.addEventListener("click", function () {
-                save();
+                saveAsync();
             });
         };
 
-        function save() {
+        async function saveAsync() {
 
+            let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
+            let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
             let questionInputSpan = viewInstance.querySelector(".question-input");
             let questionText = questionInputSpan.innerText;
-            question.text = questionText;
 
-            let url = `/api/question?pid=${question.presentationId}&sid=${question.slideId}&text=${question.text}`;
+            let url = `/api/question/save?pid=${presentationId}&sid=${slideId}&text=${questionText}`;
             let xhr = new XMLHttpRequest();
             xhr.responseType = "json";
             xhr.open("POST", url);
@@ -62,18 +52,15 @@
                         commandText: "Try Again",
                         commandCallback: function () {
                             // Recursive call to try again
-                            save();
+                            saveAsync();
                         }
                     });
                     return;
                 }
 
-                let questionData = xhr.response;
-
                 // Navigate to the static view
-                window.PollParty.App.navigate(window.PollParty.Views.StaticView, {
-                    questionData: questionData
-                });
+                let questionSet = xhr.response;
+                window.PollParty.App.navigate(window.PollParty.Views.StaticView, questionSet);
             });
 
             xhr.send();
@@ -85,7 +72,7 @@
             if (!questionInputSpan.classList.contains("placeholder")) {
                 // Handle enter key
                 if (charCode === 13) {
-                    save();
+                    saveAsync();
                     return;
                 }
 

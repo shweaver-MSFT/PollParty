@@ -4,8 +4,8 @@ const fs = require('fs');
 const express = require('express');
 const url = require('url');
 const bodyParser = require('body-parser')
-const questionData = require('./public/api/question');
-const sessionData = require('./public/api/session');
+const questionData = require('./public/api/questionData');
+const sessionData = require('./public/api/sessionData');
 
 const hostname = '127.0.0.1';
 const port = 3000;
@@ -184,6 +184,84 @@ app.all("*", function(req, res) {
     res.end();
 });
 */
+
+let state = {
+    sessions: [],
+    questionSets: []
+};
+const Models = require('./public/api/models');
+
+
+// Get questions for a presentation
+app.get('*/api/questions/pid/:pid', function (req, res) {
+
+    try {        
+        let presentationId = req.params.pid;
+        console.log(`GET */api/questions/pid/${presentationId}`);
+
+        let questionSet = state.questionSets.find((qs) => qs.presentationId === presentationId);
+        
+        if (questionSet !== undefined) {
+            res.statusCode = 200; // OK
+            res.json(questionSet);
+            console.log("200 OK");
+            console.log(JSON.stringify(questionSet));
+        }
+        else {
+            res.statusCode = 204; // No Content
+            console.log("204 No Content");
+        }
+    }
+    catch (e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+});
+
+// Save a question
+app.post('*/api/question/save', function (req, res) {
+
+    try {
+        let presentationId = req.query.pid;
+        let slideId = req.query.sid;
+        let questionText = req.query.text;
+
+        console.log(`POST */api/question/save/pid/${presentationId}/sid/${slideId}/text/${questionText}`);
+
+        let questionSet = state.questionSets.find((qs) => qs.presentationId === presentationId);
+
+        if (questionSet === undefined) {
+            questionSet = new Models.QuestionSet(presentationId);
+            questionSet.addUpdateQuestion(slideId, questionText);
+            state.questionSets.push(questionSet);
+        }
+        else {
+            questionSet.addUpdateQuestion(slideId, questionText);
+        }
+        console.log(JSON.stringify(questionSet));
+
+        res.statusCode = 200; // OK
+        res.json(questionSet);
+        console.log("200 OK");
+    }
+    catch (e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
+})
+
+
+
+
+
+
+
 const server = http.createServer(app);
 server.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);

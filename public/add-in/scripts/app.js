@@ -12,20 +12,19 @@
 
             try {
                 let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
-                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-                let url = `./api/session/pid/${presentationId}/sid/${slideId}`;
+                let url = `./api/questions/pid/${presentationId}`;
                 let xhr = new XMLHttpRequest();
                 xhr.responseType = "json";
                 xhr.open("GET", url);
                 xhr.addEventListener("load", function () {
                     if (xhr.status !== 200) {
-                        finishSetup(null);
+                        finishSetupAsync(null);
                         return;
                     }
 
                     // 
                     let data = xhr.response;
-                    finishSetup(data);
+                    finishSetupAsync(data);
                 });
                 xhr.send();
             }
@@ -39,7 +38,7 @@
                 });
             }
 
-            async function finishSetup(state) {
+            async function finishSetupAsync(state) {
 
                 // Check for existing state
                 let hasExistingState = state !== null;
@@ -65,17 +64,22 @@
                     }
                 }
                 else {
-                    if (!hasExistingState) {
+                    if (hasExistingState) {
 
-                        // Show the Edit view, empty and ready for configuration
-                        navigate(window.PollParty.Views.EditView);
-                    }
-                    else {
+                        // Get the current question
+                        let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
+                        let question = state.questions.find((q) => q.slideId == slideId);
 
-                        // Show the static/saved view
-                        // TODO: Populate view with the existing data
-                        navigate(window.PollParty.Views.StaticView);
+                        if (question != null) {
+
+                            // Show the static/saved view
+                            navigate(window.PollParty.Views.StaticView, state);
+                            return;
+                        }
                     }
+                    
+                    // Show the Edit view, empty and ready for configuration
+                    navigate(window.PollParty.Views.EditView);
                 }
             }
         };

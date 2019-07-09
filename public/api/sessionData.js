@@ -4,7 +4,7 @@
 // Session  stores responses information from audience.
 
 const randomize = require('randomatic');
-const questionsData = require('./question');
+const questionsData = require('./questionData');
 
 class session {
 
