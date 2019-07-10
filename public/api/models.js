@@ -41,12 +41,8 @@
     let ResponseSet = function() {
 
         let responses = [];
-        let trueCount = 0;
-        let falseCount = 0;
         
         this.responses = responses;
-        this.trueCount = trueCount;
-        this.falseCount = falseCount;
     };
 
     let Session = function(presentationId) {

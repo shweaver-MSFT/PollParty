@@ -3,7 +3,7 @@
 
     let LiveView = function () {
 
-        const syncInterval = 10000;
+        const syncInterval = 1000;
         
         let viewInstance = null;
         let code = null;
@@ -82,8 +82,19 @@
                 }
 
                 let sessionData = xhr.response;
-                let trueCount = parseInt(sessionData.responseSet.trueCount);
-                let falseCount = parseInt(sessionData.responseSet.falseCount);
+                let trueCount = 0;
+                let falseCount = 0;
+                let currentSlideId = sessionData.currentQuestion.slideId;
+                let responses = sessionData.responseSet.responses;
+                for(var i = 0; i <responses.length; i++) {
+                    
+                    let response = responses[i];
+                    if (response.slideId == currentSlideId) {
+                        if (response.responseBool == true) trueCount++;
+                        else falseCount++;
+                    }
+                }
+
                 updateProgress(trueCount, falseCount);
             });
             xhr.send();
@@ -93,8 +104,8 @@
 
             let totalCount = yesCount + noCount;
 
-            let yesPercentString = (totalCount > 0 ? 100 * (yesCount / totalCount) : 0) + "%";
-            let noPercentString = (totalCount > 0 ? 100 * (noCount / totalCount) : 0) + "%";
+            let yesPercentString = (totalCount > 0 ? 100 * (yesCount / totalCount) : 0).toFixed(0) + "%";
+            let noPercentString = (totalCount > 0 ? 100 * (noCount / totalCount) : 0).toFixed(0) + "%";
 
             let yesProgressBar = viewInstance.querySelector(".answer-yes .meter .progress");
             let yesPercentSpan = viewInstance.querySelector(".answer-yes .percent-text");
