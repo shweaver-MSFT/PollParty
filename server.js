@@ -41,8 +41,6 @@ app.get('/add-in', function (req, res) {
     });
 });
 
-
-
 // Get questions for a presentation
 app.get('*/api/questions/pid/:pid', function (req, res) {
 
@@ -109,17 +107,20 @@ app.get('*/api/session/live', function (req, res) {
     try {
         let presentationId = req.query.pid;
         let slideId = req.query.sid;
-        console.log(`GET */api/session/live?pid=${presentationId}&sid=${slideId}`);
-
         let session = state.sessions.find((s) => s.presentationId == presentationId);
+        let questionSet = state.questionSets.find((qs) => qs.presentationId == presentationId);
+        let currentQuestion = questionSet.getBySlideId(slideId);
+
+        console.log(`GET */api/session/live?pid=${presentationId}&sid=${slideId}`);
 
         if (!session) {
             session = new models.Session(presentationId);
             state.sessions.push(session);
         }
 
-        session.activeSlideId = slideId;
-
+        session.currentQuestion = currentQuestion;
+        session.currentQuestionIndex = questionSet.questions.indexOf(currentQuestion);
+        session.questionTotal = questionSet.questions.length;
 
         res.statusCode = 200; // OK
         res.json(session);
@@ -138,7 +139,6 @@ app.get('*/api/session/:code', function (req, res) {
 
     try {
         let code = req.params.code;
-        let slideId = req.query.slideId;
         let session = state.sessions.find((s) => s.code == code);
 
         console.log(`GET */api/session/${code}`);
@@ -147,11 +147,6 @@ app.get('*/api/session/:code', function (req, res) {
             res.statusCode = 204; // No Content
             return;
         }
-
-        let presentationId = session.presentationId;
-        let questionSet = state.questionSets.find((qs) => qs.presentationId == presentationId);
-        let question = questionSet.getBySlideId(slideId);
-        session.currentQuestion = question;
 
         res.statusCode = 200; // OK
         res.json(session);
@@ -175,13 +170,23 @@ app.post('*/api/session/:code', function (req, res) {
         let code = req.params.code;
         let response = req.query.response;
         let session = state.sessions.find((s) => s.code == code);
+        let slideId = session.currentQuestion.slideId;
+        let responseObj = new models.Response(slideId, response == "true");
 
-        session.respond(session.currentQuestion.slideId, response);
+        session.responseSet.responses.push(responseObj);
 
-        let session = new models.Session(presentationId);
-        state.sessions.push(session);
 
-        console.log(`POST */api/session/${code}?response=${response}`);
+        if (response == "true") {
+            session.responseSet.trueCount++;
+        }
+        else {
+            session.responseSet.falseCount++;
+        }
+
+        console.log(`POST */api/session/${code}?response=${response}&slideId=${session.currentQuestion.slideId}`)
+        console.log(response);
+
+        //console.log(JSON.stringify(state));
 
         res.statusCode = 200; // OK
         res.json(session);

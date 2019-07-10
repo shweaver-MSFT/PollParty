@@ -3,11 +3,10 @@
 
     let LiveView = function () {
 
-        const syncInterval = 1000;
+        const syncInterval = 10000;
         
         let viewInstance = null;
-        let sessionData = null;
-        let questionSet = null;
+        let code = null;
 
         let initialize = async function (view, data) {
             viewInstance = view;
@@ -19,51 +18,59 @@
                 return;
             }
 
-            questionSet = data;
-            
-            let sessionData = await new Promise(function(resolve, reject) {
+            let questionSet = data;
+            let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
+            let url = `./api/session/live?pid=${questionSet.presentationId}&sid=${slideId}`;
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = "json";
+            xhr.open("GET", url);
+            xhr.addEventListener("load", function () {
+                if (xhr.status !== 200) {
 
-                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-                let url = `./api/session/live?pid=${questionSet.presentationId}&sid=${slideId}`;
-                let xhr = new XMLHttpRequest();
-                xhr.responseType = "json";
-                xhr.open("GET", url);
-                xhr.addEventListener("load", function () {
-                    if (xhr.status !== 200) {
-    
-                        // TODO: Handle error
-                        reject();
-                        return;
-                    }
-    
-                    resolve(xhr.response);
-                });
-                xhr.send();
+                    window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
+                        message: "You appear to be presenting a slide that has not yet been configured.",
+                        showCommand: false
+                    });
+                    return;
+                }
+
+                finishSetup(xhr.response);
             });
+            xhr.send();
 
-            let activeSlideId = sessionData.activeSlideId;
-            let currentQuestion = questionSet.questions.find((q) => q.slideId == activeSlideId);
-            let questionText = currentQuestion.questionText;
-            let questionIndex = questionSet.questions.indexOf(currentQuestion);
-            let questionTotal = questionSet.questions.length;
-            let code = sessionData.code;
+            function finishSetup(sessionData) {
 
-            let questionTextSpan = viewInstance.querySelector(".question-text");
-            questionTextSpan.innerText = questionText;
+                let currentQuestion = sessionData.currentQuestion;
+                let questionText = currentQuestion.questionText;
+                let questionIndex = 0;
 
-            let joinCodeSpan = viewInstance.querySelector(".join-code");
-            joinCodeSpan.innerText = code;
+                for(var i = 0; i < questionSet.questions.length; i++) {
+                    if (questionSet.questions[i].slideId == currentQuestion.slideId) {
+                        questionIndex = i;
+                        break;
+                    }
+                }
 
-            let questionCountSpan = viewInstance.querySelector(".question-count");
-            questionCountSpan.innerText = `${questionIndex + 1}/${questionTotal}`;
+                let questionTotal = questionSet.questions.length;
+                code = sessionData.code;
 
-            updateProgress(0, 0);
-            setInterval(syncProgress, syncInterval);
+                let questionTextSpan = viewInstance.querySelector(".question-text");
+                questionTextSpan.innerText = questionText;
+
+                let joinCodeSpan = viewInstance.querySelector(".join-code");
+                joinCodeSpan.innerText = code;
+
+                let questionCountSpan = viewInstance.querySelector(".question-count");
+                questionCountSpan.innerText = `${questionIndex + 1}/${questionTotal}`;
+
+                updateProgress(0, 0);
+                setInterval(syncProgress, syncInterval);
+            }
         };
 
         function syncProgress() {
 
-            let url = `./api/session/${sessionData.code}`;
+            let url = `./api/session/${code}`;
             let xhr = new XMLHttpRequest();
             xhr.responseType = "json";
             xhr.open("GET", url);
@@ -74,8 +81,7 @@
                     return;
                 }
 
-                sessionData = xhr.response;
-                
+                let sessionData = xhr.response;
                 let trueCount = parseInt(sessionData.responseSet.trueCount);
                 let falseCount = parseInt(sessionData.responseSet.falseCount);
                 updateProgress(trueCount, falseCount);
@@ -86,8 +92,9 @@
         function updateProgress(yesCount, noCount) {
 
             let totalCount = yesCount + noCount;
-            let yesPercentString = (totalCount > 0 ? (yesCount / totalCount) : 0) + "%";
-            let noPercentString = (totalCount > 0 ? (noCount / totalCount) : 0) + "%";
+
+            let yesPercentString = (totalCount > 0 ? 100 * (yesCount / totalCount) : 0) + "%";
+            let noPercentString = (totalCount > 0 ? 100 * (noCount / totalCount) : 0) + "%";
 
             let yesProgressBar = viewInstance.querySelector(".answer-yes .meter .progress");
             let yesPercentSpan = viewInstance.querySelector(".answer-yes .percent-text");

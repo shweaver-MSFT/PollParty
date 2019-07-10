@@ -16,10 +16,10 @@
                 if (questionData !== null && questionData !== undefined) {
 
                     let questionCount = view.querySelector(".question-count");
-                    questionCount.innerText = `${sessionData.currentQuestionIndex}/${sessionData.questionTotal}`;
+                    questionCount.innerText = `${sessionData.currentQuestionIndex + 1}/${sessionData.questionTotal}`;
 
                     let questionText = view.querySelector(".question-text");
-                    questionText.innerText = questionData.text;
+                    questionText.innerText = questionData.questionText;
                 }
             }
 

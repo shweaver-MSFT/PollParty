@@ -22,10 +22,6 @@
             }
         }
 
-        function getById(questionId) {
-            return questions.find((q) => q.id == questionId);
-        }
-
         function getBySlideId(slideId) {
             return questions.find((q) => q.slideId == slideId);
         }
@@ -33,7 +29,6 @@
         this.presentationId = presentationId;
         this.questions = questions;
         this.addUpdateQuestion = addUpdateQuestion;
-        this.getById = getById;
         this.getBySlideId = getBySlideId;
     };
 
@@ -49,22 +44,9 @@
         let trueCount = 0;
         let falseCount = 0;
         
-        function addResponse(response) {
-            
-            responses.push(response);
-
-            if (response.responseBool == true) {
-                trueCount++;
-            }
-            else {
-                falseCount++;
-            }
-        }
-
         this.responses = responses;
         this.trueCount = trueCount;
         this.falseCount = falseCount;
-        this.addResponse = addResponse;
     };
 
     let Session = function(presentationId) {
@@ -72,17 +54,15 @@
         let code = 1234;// TODO: GenCode here
         let responseSet = new ResponseSet();
         let currentQuestion = null;
-
-        function respond(slideId, responseBool) {
-            let response = new Response(slideId, responseBool);
-            responseSet.addResponse(response);
-        }
+        let currentQuestionIndex = 0;
+        let questionTotal = 0;
 
         this.presentationId = presentationId;
         this.code = code;
-        this.currentQuestion = currentQuestion;
         this.responseSet = responseSet;
-        this.respond = respond;
+        this.currentQuestion = currentQuestion;
+        this.currentQuestionIndex = currentQuestionIndex;
+        this.questionTotal = questionTotal;
     };
 
     module.exports = { Question, QuestionSet, Response, ResponseSet, Session };
