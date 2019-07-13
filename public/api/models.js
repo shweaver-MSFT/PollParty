@@ -1,13 +1,14 @@
-(function() {
+const randomize = require('randomatic');
+(function () {
 
-    let Question = function(slideId, questionText) {
+    let Question = function (slideId, questionText) {
 
         this.slideId = slideId;
         this.questionText = questionText;
     };
 
-    let QuestionSet = function(presentationId) {
-        
+    let QuestionSet = function (presentationId) {
+
         let questions = [];
 
         function addUpdateQuestion(slideId, questionText) {
@@ -32,22 +33,22 @@
         this.getBySlideId = getBySlideId;
     };
 
-    let Response = function(slideId, responseBool) {
+    let Response = function (slideId, responseBool) {
 
         this.slideId = slideId;
         this.responseBool = responseBool;
     };
 
-    let ResponseSet = function() {
+    let ResponseSet = function () {
 
         let responses = [];
-        
+
         this.responses = responses;
     };
 
-    let Session = function(presentationId) {
+    let Session = function (presentationId) {
 
-        let code = 1234;// TODO: GenCode here
+        let code = randomize('0', 4);
         let responseSet = new ResponseSet();
         let currentQuestion = null;
         let currentQuestionIndex = 0;
