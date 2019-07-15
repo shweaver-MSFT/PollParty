@@ -5,29 +5,31 @@
 
         let viewInstance = null;
 
-        let initialize = function (view, data) {
+        function initialize(view, data) {
             
             viewInstance = view;
 
             // Disable the confirm button until we have valid input
             let confirmButton = view.querySelector(".confirm-button");
             confirmButton.disabled = true;
-            confirmButton.addEventListener("click", function() {
-                submit();
-            });
+            confirmButton.addEventListener("click", submit);
 
             // Handle text input for our custom input field
-            document.addEventListener("keypress", function (e) {
-                handleKeypress(e.keyCode);
-            });
+            document.addEventListener("keypress", handleKeypress);
 
             // Focus on the first digit
             let firstDigit = view.querySelector(".code-panel").querySelector(".digit");
             firstDigit.classList.add("focused");
         };
 
-        function handleKeypress(charCode) {
+        function unload() {
+            document.removeEventListener("keypress", handleKeypress);
+            viewInstance = null;
+        };
+
+        function handleKeypress(e) {
             
+            let charCode = e.keyCode;
             let confirmButton = viewInstance.querySelector(".confirm-button");
             let digitSpans = viewInstance.querySelector(".code-panel").querySelectorAll(".digit");
 
@@ -108,6 +110,7 @@
         }
 
         this.initialize = initialize;
+        this.unload = unload;
         this.templateSelector = ".code.view";
     };
 

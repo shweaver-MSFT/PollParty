@@ -2,10 +2,7 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
-const url = require('url');
 const bodyParser = require('body-parser')
-const questionData = require('./public/api/questionData');
-const sessionData = require('./public/api/sessionData');
 const models = require('./public/api/models');
 
 const hostname = '127.0.0.1';

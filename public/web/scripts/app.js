@@ -3,7 +3,9 @@
 
     let PollPartyApp = function () {
 
-        let initialize = function () {
+        let currentView = null;
+
+        function initialize() {
 
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
@@ -28,13 +30,18 @@
                 viewType: A type from window.PollParty.Views for display.
                 data (optional): An object to initialize the view with.
         */
-        let navigate = function (viewType, data) {
+        function navigate(viewType, data) {
 
             setImmediate(function() {
-                let view = new viewType();
-                let template = document.querySelector(`#templates ${view.templateSelector}`).cloneNode(true);
+                
+                if (currentView && currentView.unload) {
+                    currentView.unload();
+                }
 
-                view.initialize(template, data);
+                currentView = new viewType();
+
+                let template = document.querySelector(`#templates ${currentView.templateSelector}`).cloneNode(true);
+                currentView.initialize(template, data);
 
                 let contentRoot = document.querySelector("#content-root");
                 while (contentRoot.firstChild)
