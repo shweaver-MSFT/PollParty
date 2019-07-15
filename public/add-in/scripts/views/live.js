@@ -7,8 +7,9 @@
         
         let viewInstance = null;
         let code = null;
+        let intervalId = null;
 
-        let initialize = async function (view, data) {
+        async function initialize(view, data) {
             viewInstance = view;
 
             // Get the session data from the previous view
@@ -64,9 +65,16 @@
                 questionCountSpan.innerText = `${questionIndex + 1}/${questionTotal}`;
 
                 updateProgress(0, 0);
-                setInterval(syncProgress, syncInterval);
+                intervalId = setInterval(syncProgress, syncInterval);
             }
         };
+
+        function unload() {
+            if (intervalId != null) {
+                clearInterval(intervalId);
+                intervalId = null;
+            }
+        }
 
         function syncProgress() {
 
@@ -129,6 +137,7 @@
         }
 
         this.initialize = initialize;
+        this.unload = unload;
         this.templateSelector = ".live.view";
     };
 

@@ -67,9 +67,7 @@
                 }
                 
                 // Send to the confirm view to wait for the next question
-                window.PollParty.App.navigate(window.PollParty.Views.ConfirmView, {
-                    session: sessionData
-                });
+                window.PollParty.App.navigate(window.PollParty.Views.ConfirmView, sessionData);
             });
             xhr.send();
         }
