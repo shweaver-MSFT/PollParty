@@ -6,7 +6,7 @@
         const placeholderText = "Type Your Question";
         let viewInstance = null;
 
-        let initialize = async function (view, data) {
+        async function initialize(view, data) {
 
             viewInstance = view;
             let saveButton = viewInstance.querySelector(".save-button");
@@ -23,15 +23,18 @@
             updatePlaceholder();
 
             // Handle text input for our custom input field
-            document.addEventListener("keypress", function (e) {
-                handleKeypress(e.keyCode);
-            });
+            document.addEventListener("keypress", handleKeypress);
 
             // Handle save click
             saveButton.addEventListener("click", function () {
                 saveAsync();
             });
-        };
+        }
+
+        function unload() {
+            document.removeEventListener("keypress", handleKeypress);
+            viewInstance = null;
+        }
 
         async function saveAsync() {
 
@@ -64,9 +67,11 @@
             });
 
             xhr.send();
-        };
+        }
 
-        function handleKeypress(charCode) {
+        function handleKeypress(e) {
+
+            let charCode = e.keyCode;
 
             let questionInputSpan = viewInstance.querySelector(".question-input");
             if (!questionInputSpan.classList.contains("placeholder")) {
@@ -97,7 +102,7 @@
                 questionInputSpan.innerText += key;
                 updatePlaceholder();
             }
-        };
+        }
 
         function updatePlaceholder() {
 
@@ -118,6 +123,7 @@
         }
 
         this.initialize = initialize;
+        this.unload = unload;
         this.templateSelector = ".edit.view";
     };
 
