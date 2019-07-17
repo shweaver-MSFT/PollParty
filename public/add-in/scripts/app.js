@@ -77,7 +77,7 @@
                             return;
                         }
                     }
-                    
+
                     // Show the Edit view, empty and ready for configuration
                     navigate(window.PollParty.Views.EditView);
                 }
@@ -109,17 +109,20 @@
             });
         };
 
-        // function activeViewChanged(args) {
-        //     initialize();
-        // }
+        function activeViewChanged(args) {
+            initialize();
+        }
 
-
-        // Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, activeViewChanged,
-        //     function (asyncResult) {
-        //         if (asyncResult.status === "failed") {
-        //             console.log("Action failed with error: " + asyncResult.error.message);
-        //         }
-        //     });
+        Office.onReady().then(
+            function () {
+                Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, activeViewChanged,
+                    function (asyncResult) {
+                        if (asyncResult.status === "failed") {
+                            console.log("Action failed with error: " + asyncResult.error.message);
+                        }
+                    });
+            }
+        );
 
         this.initialize = initialize;
         this.navigate = navigate;
