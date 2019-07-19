@@ -21,20 +21,19 @@
                     'Content-Type': 'application/json'
                 }
             });
-            let session = await response.json();
-            
+
             // If no session, nav to error view
-            if (session === null) {
+            if (response.status !== 200) {
                 window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
                     message: "We couldn't find an active session for the code provided. Please try again."
                 });
                 return;
             }
 
-            // If valid session, nav to response view
             let statusText = view.querySelector(".status-text");
             statusText.innerText = "Connected";
 
+            let session = await response.json();
             window.PollParty.App.navigate(window.PollParty.Views.ResponseView, {
                 session: session
             });

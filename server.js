@@ -43,10 +43,10 @@ app.get('*/api/questions/pid/:pid', function (req, res) {
 
     try {        
         let presentationId = req.params.pid;
-        console.log(`GET */api/questions/pid/${presentationId}`);
-
         let questionSet = state.questionSets.find((qs) => qs.presentationId === presentationId);
         
+        console.log(`GET */api/questions/pid/${presentationId}`);
+
         if (questionSet !== undefined) {
             res.statusCode = 200; // OK
             res.json(questionSet);
@@ -140,7 +140,7 @@ app.get('*/api/session/:code', function (req, res) {
 
         console.log(`GET */api/session/${code}`);
 
-        if (session === null) {
+        if (!session) {
             res.statusCode = 204; // No Content
             return;
         }
@@ -172,7 +172,6 @@ app.post('*/api/session/:code', function (req, res) {
 
         session.responseSet.responses.push(responseObj);
 
-
         if (response == "true") {
             session.responseSet.trueCount++;
         }
@@ -181,9 +180,6 @@ app.post('*/api/session/:code', function (req, res) {
         }
 
         console.log(`POST */api/session/${code}?response=${response}&slideId=${session.currentQuestion.slideId}`)
-        console.log(response);
-
-        //console.log(JSON.stringify(state));
 
         res.statusCode = 200; // OK
         res.json(session);

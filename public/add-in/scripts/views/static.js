@@ -3,38 +3,59 @@
 
     let StaticView = function () {
 
+        let editButton  = null;
+        let questionSet = null;
+
         let initialize = async function (view, data) {
 
-            let editButton = view.querySelector(".command-button");
-            let questionTextSpan = view.querySelector(".question-text");
-            let questionCountDiv = view.querySelector('.question-count');
+            try {
+                if (!data || !data.questionSet) {
+                    throw null;
+                }
 
-            editButton.disabled = true;
+                questionSet = data.questionSet;
+                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
+                let question = questionSet.questions.find((q) => q.slideId == slideId);
+                let questionIndex = questionSet.questions.indexOf(question) + 1;
+                let questionTotal = questionSet.questions.length;
 
-            // Get the current question
-            let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-            let question = data.questions.find((q) => q.slideId == slideId);
-
-            if (question) {
-                // Set question text
+                // Configure question text
+                let questionTextSpan = view.querySelector(".question-text");
                 questionTextSpan.innerText = question.questionText;
+                
+                // Configure edit button
+                editButton = view.querySelector(".command-button");
+                editButton.addEventListener("click", handleEditButtonClick);
+
+                // Configure question index and total
+                let questionCountDiv = view.querySelector('.question-count');
+                questionCountDiv.innerText = `${questionIndex}/${questionTotal}`;
             }
-
-            // Configure edit button
-            editButton.disabled = false;
-            editButton.addEventListener("click", function () {
-
-                // Navigate to the edit view
-                window.PollParty.App.navigate(window.PollParty.Views.EditView, data);
-            });
-
-            // Configure question index and total
-            let questionIndex = data.questions.indexOf(question) + 1;
-            let questionTotal = data.questions.length;
-            questionCountDiv.innerText = `${questionIndex}/${questionTotal}`;
+            catch(e) {
+                window.PollParty.App.navigate(window.PollParty.Views.ErrorView);
+            }
         };
 
+        function unload() {
+
+            if (editButton) {
+                editButton.removeEventListener("click", handleEditButtonClick);
+                editButton = null;
+            }
+
+            questionSet = null;
+        }
+
+        function handleEditButtonClick(e) {
+
+            // Navigate to the edit view
+            window.PollParty.App.navigate(window.PollParty.Views.EditView, {
+                questionSet: questionSet
+            });
+        }
+
         this.initialize = initialize;
+        this.unload = unload;
         this.templateSelector = ".static.view";
     };
 

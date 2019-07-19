@@ -18,7 +18,7 @@
                 // We've failed to load a view. Show an error message.
                 navigate(window.PollParty.Views.ErrorView, {
                     exception: e,
-                    message: "We have encountered an error loading the App. Please try again.",
+                    message: "We have encountered an error loading the app. Please try again.",
                     commandText: "Refresh",
                     commandCallback: initialize
                 });

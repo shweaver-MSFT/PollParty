@@ -10,40 +10,24 @@
             // Show the loading view while we init
             navigate(window.PollParty.Views.LoadingView);
 
-            await Office.onReady();
-
             try {
+                await Office.onReady();
+
                 let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
+
                 let url = `./api/questions/pid/${presentationId}`;
-                let xhr = new XMLHttpRequest();
-                xhr.responseType = "json";
-                xhr.open("GET", url);
-                xhr.addEventListener("load", function () {
-                    if (xhr.status !== 200) {
-                        finishSetupAsync(null);
-                        return;
+                let response = await fetch(url, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
                     }
-
-                    // 
-                    let data = xhr.response;
-                    finishSetupAsync(data);
                 });
-                xhr.send();
-            }
-            catch (e) {
-                // We've failed to load a view. Show an error message.
-                navigate(window.PollParty.Views.ErrorView, {
-                    exception: e,
-                    message: "We have encountered an error loading the Add-In. Please try again.",
-                    commandText: "Refresh",
-                    commandCallback: initialize
-                });
-            }
 
-            async function finishSetupAsync(state) {
-
-                // Check for existing state
-                let hasExistingState = state !== null;
+                let questionSet = null;
+                if (response.status === 200) {
+                    questionSet = await response.json();
+                }
+                let hasExistingState = questionSet !== null;
 
                 // Check if presenting or not
                 let isPresenting = await window.PollParty.Helpers.PowerPointHelper.isPresentingAsync();
@@ -53,14 +37,15 @@
 
                         // In a live presentation state, but missing configuration.
                         navigate(window.PollParty.Views.ErrorView, {
-                            message: "You appear to be presenting a slide that has not yet been configured.",
-                            showCommand: false
+                            message: "You appear to be presenting a slide that has not yet been configured."
                         });
                     }
                     else {
 
                         // Show the live presentation view.
-                        navigate(window.PollParty.Views.LiveView, state);
+                        navigate(window.PollParty.Views.LiveView, {
+                            questionSet: questionSet
+                        });
                     }
                 }
                 else {
@@ -68,12 +53,14 @@
 
                         // Get the current question
                         let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-                        let question = state.questions.find((q) => q.slideId == slideId);
+                        let question = questionSet.questions.find((q) => q.slideId == slideId);
 
                         if (question != null) {
 
                             // Show the static/saved view
-                            navigate(window.PollParty.Views.StaticView, state);
+                            navigate(window.PollParty.Views.StaticView, {
+                                questionSet: questionSet
+                            });
                             return;
                         }
                     }
@@ -81,6 +68,17 @@
                     // Show the Edit view, empty and ready for configuration
                     navigate(window.PollParty.Views.EditView);
                 }
+
+
+            }
+            catch (e) {
+                // We've failed to load a view. Show an error message.
+                navigate(window.PollParty.Views.ErrorView, {
+                    exception: e,
+                    message: "We have encountered an error loading the Add-In. Please try again.",
+                    commandText: "Refresh",
+                    commandCallback: initialize
+                });
             }
         };
 

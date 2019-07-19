@@ -4,89 +4,93 @@
     let EditView = function () {
 
         const placeholderText = "Type Your Question";
-        let viewInstance = null;
+
+        let saveButton = null;
+        let questionInputSpan = null;
 
         async function initialize(view, data) {
 
-            viewInstance = view;
-            let saveButton = viewInstance.querySelector(".save-button");
-            let questionInputSpan = viewInstance.querySelector(".question-input");
+            try {
+                saveButton = view.querySelector(".save-button");
+                questionInputSpan = view.querySelector(".question-input");
 
-            if (data) {
+                if (data && data.questionSet) {
 
-                let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-                let question = data.questions.find((q) => q.slideId == slideId);
-                questionInputSpan.innerText = question.questionText;
+                    let questionSet = data.questionSet;
+                    let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
+                    let question = questionSet.questions.find((q) => q.slideId == slideId);
+                    questionInputSpan.innerText = question.questionText;
+                }
+
+                // Update default state
+                updatePlaceholder();
+
+                // Handle text input for our custom input field
+                document.addEventListener("keypress", handleKeypress);
+
+                // Handle save click
+                saveButton.addEventListener("click", handleSaveButtonClick);
             }
-
-            // Update default state
-            updatePlaceholder();
-
-            // Handle text input for our custom input field
-            document.addEventListener("keypress", handleKeypress);
-
-            // Handle save click
-            saveButton.addEventListener("click", function () {
-                saveAsync();
-            });
+            catch(e) {
+                window.PollParty.App.navigate(window.PollParty.Views.ErrorView);
+            }
         }
 
         function unload() {
+
             document.removeEventListener("keypress", handleKeypress);
-            viewInstance = null;
+
+            if (saveButton) {
+                saveButton.removeEventListener("click", handleSaveButtonClick);
+                saveButton = null;
+            }
+
+            questionInputSpan = null;
+        }
+
+        function handleSaveButtonClick() {
+            saveAsync();
         }
 
         async function saveAsync() {
 
             let presentationId = await window.PollParty.Helpers.PowerPointHelper.getPresentationIdAsync();
             let slideId = await window.PollParty.Helpers.PowerPointHelper.getSelectedSlideIdAsync();
-            let questionInputSpan = viewInstance.querySelector(".question-input");
             let questionText = questionInputSpan.innerText;
 
             let url = `/api/question/save?pid=${presentationId}&sid=${slideId}&text=${questionText}`;
-            let xhr = new XMLHttpRequest();
-            xhr.responseType = "json";
-            xhr.open("POST", url);
-            xhr.addEventListener("load", function () {
-                if (xhr.status !== 200) {
-                    window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
-                        message: "Error saving question, please try again.",
-                        showButton: true,
-                        commandText: "Try Again",
-                        commandCallback: function () {
-                            // Recursive call to try again
-                            saveAsync();
-                        }
-                    });
-                    return;
+            let response = await fetch(url, {
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
                 }
-
-                // Navigate to the static view
-                let questionSet = xhr.response;
-                window.PollParty.App.navigate(window.PollParty.Views.StaticView, questionSet);
             });
+            
+            let questionSet = await response.json();
 
-            xhr.send();
+            window.PollParty.App.navigate(window.PollParty.Views.StaticView, {
+                questionSet: questionSet
+            });
         }
 
         function handleKeypress(e) {
 
             let charCode = e.keyCode;
 
-            let questionInputSpan = viewInstance.querySelector(".question-input");
             if (!questionInputSpan.classList.contains("placeholder")) {
-                // Handle enter key
-                if (charCode === 13) {
-                    saveAsync();
-                    return;
-                }
 
-                // Handle backspace
-                if (charCode === 8) {
-                    questionInputSpan.innerText = questionInputSpan.innerText.slice(0, -1);
+                switch(charCode) {
 
-                    updatePlaceholder();
-                    return;
+                    // Handle enter key
+                    case 13:
+                        saveAsync();
+                        return;
+
+                    // Handle backspace
+                    case 8:
+                        questionInputSpan.innerText = questionInputSpan.innerText.slice(0, -1);
+                        updatePlaceholder();
+                        return; 
                 }
             }
 
@@ -105,9 +109,6 @@
         }
 
         function updatePlaceholder() {
-
-            let saveButton = viewInstance.querySelector(".save-button");
-            let questionInputSpan = viewInstance.querySelector(".question-input");
 
             let questionText = questionInputSpan.innerText;
 

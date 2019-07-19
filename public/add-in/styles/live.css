@@ -17,6 +17,10 @@
     text-align: right;
 }
 
+.live.view .percent-text.highlight {
+    font-weight: bold;
+}
+
 .live.view .answer-yes, .live.view .answer-no {
     display: flex;
     flex-direction: row;
