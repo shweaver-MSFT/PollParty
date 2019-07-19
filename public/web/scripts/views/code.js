@@ -3,14 +3,13 @@
 
     let CodeView = function () {
 
-        let viewInstance = null;
+        let confirmButton = null;
+        let digitSpans = null;
 
         function initialize(view, data) {
             
-            viewInstance = view;
-
             // Disable the confirm button until we have valid input
-            let confirmButton = view.querySelector(".confirm-button");
+            confirmButton = view.querySelector(".confirm-button");
             confirmButton.disabled = true;
             confirmButton.addEventListener("click", submit);
 
@@ -18,20 +17,25 @@
             document.addEventListener("keypress", handleKeypress);
 
             // Focus on the first digit
-            let firstDigit = view.querySelector(".code-panel").querySelector(".digit");
-            firstDigit.classList.add("focused");
+            digitSpans = view.querySelector(".code-panel").querySelectorAll(".digit");
+            digitSpans[0].classList.add("focused");
         };
 
         function unload() {
+
             document.removeEventListener("keypress", handleKeypress);
-            viewInstance = null;
+            
+            if (confirmButton) {
+                confirmButton.removeEventListener("click", submit);
+                confirmButton = null;
+            }
+
+            digitSpans = null;
         };
 
         function handleKeypress(e) {
             
             let charCode = e.keyCode;
-            let confirmButton = viewInstance.querySelector(".confirm-button");
-            let digitSpans = viewInstance.querySelector(".code-panel").querySelectorAll(".digit");
 
             // Handle enter key
             if (charCode === 13 && confirmButton.disabled === false) {
@@ -95,8 +99,6 @@
 
         function submit() {
             
-            let digitSpans = viewInstance.querySelector(".code-panel").querySelectorAll(".digit");
-
             // Extract the code digits
             let code = "";
             for (var i = 0; i < digitSpans.length; i++) {
@@ -106,7 +108,9 @@
             }
 
             // Send to the connect view to handle the session connection
-            window.PollParty.App.navigate(window.PollParty.Views.ConnectView, { code: code });
+            window.PollParty.App.navigate(window.PollParty.Views.ConnectView, { 
+                code: code 
+            });
         }
 
         this.initialize = initialize;

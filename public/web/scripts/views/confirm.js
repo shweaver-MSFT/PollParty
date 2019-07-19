@@ -3,56 +3,88 @@
 
     let ConfirmView = function () {
 
-        const checkInterval = 1000;
+        const requestInterval = 1000;
 
-        let currentSlideId = null;
+        let codeButton = null;
+        let session = null;
+        let sessionRequest = null;
         let intervalId = null;
-        let code = null;
 
         function initialize(view, data) {
 
-            // Wire up code button
-            let codeButton = view.querySelector(".code-button");
-            codeButton.addEventListener("click", function() {
-                window.PollParty.App.navigate(window.PollParty.Views.CodeView);
-            });
+            try {
 
-            // Get response data from the previous view
-            let sessionData = data;
-            if (sessionData) {
-                
-                code = sessionData.code;
-                currentSlideId = sessionData.currentQuestion.slideId;
-                intervalId = setInterval(checkCurrentQuestion, checkInterval);
+                if (!data || data.session === undefined) {
+                    throw "We've encountered an error.";
+                }
+
+                session = data.session;
+
+                // Wire up code button
+                codeButton = view.querySelector(".code-button");
+                codeButton.addEventListener("click", handleCodeButtonClick);
+
+                // Prep the request for session updates
+                sessionRequest = new XMLHttpRequest();
+                sessionRequest.responseType = "json";
+                sessionRequest.open("GET", `./api/session/${session.code}`);
+                sessionRequest.addEventListener("load", handleSessionResponse);
+
+                // Queue interval to send session requests
+                intervalId = setInterval(sessionRequest.send, requestInterval);
+            }
+            catch(e) {
+                handleError(e);
             }
         };
 
         function unload() {
+
+            if (codeButton) {
+                codeButton.removeEventListener("click", handleCodeButtonClick);
+                codeButton = null;
+            }
+
+            if (sessionRequest) {
+                sessionRequest.removeEventListener("load", handleSessionResponse);
+                sessionRequest = null;
+            }
+
             if (intervalId !== null) {
                 clearInterval(intervalId);
                 intervalId = null;
             }
+
+            session = null;
         }
 
-        function checkCurrentQuestion() {
-            let url = `./api/session/${code}`;
-            let xhr = new XMLHttpRequest();
-            xhr.responseType = "json";
-            xhr.open("GET", url);
-            xhr.addEventListener("load", function () {
+        function handleError(e) {
 
-                if (xhr.status !== 200) {
-                    // TODO: Handle error
-                    return;
-                }
+            let errorMessage = e || "We've encountered an error.";
 
-                let sessionData = xhr.response;
-                let slideId = sessionData.currentQuestion.slideId;
-                if (currentSlideId != slideId) {
-                    window.PollParty.App.navigate(window.PollParty.Views.ResponseView, sessionData);
-                }
+            window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
+                message: `${errorMessage} Please re-enter the code and try again.`
             });
-            xhr.send();
+        }
+
+        function handleCodeButtonClick(e) {
+            window.PollParty.App.navigate(window.PollParty.Views.CodeView);
+        }
+
+        function handleSessionResponse() {
+
+            if (sessionRequest.status !== 200) {
+                handleError();
+                return;
+            }
+
+            // If the current question changes, navigate to the response view.
+            let newSession = sessionRequest.response;
+            if (session.currentQuestion.slideId != newSession.currentQuestion.slideId) {
+                window.PollParty.App.navigate(window.PollParty.Views.ResponseView, {
+                    session: newSession
+                });
+            }
         }
 
         this.initialize = initialize;

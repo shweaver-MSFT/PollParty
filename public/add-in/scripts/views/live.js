@@ -9,13 +9,19 @@
         let code = null;
         let intervalId = null;
 
+        function handleError() {
+            window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
+                message: "You appear to be presenting a slide that has not yet been configured.",
+                showCommand: false
+            });
+        }
+
         async function initialize(view, data) {
             viewInstance = view;
 
             // Get the session data from the previous view
             if (!data) {
-
-                // TODO: handle error case
+                handleError();
                 return;
             }
 
@@ -26,12 +32,9 @@
             xhr.responseType = "json";
             xhr.open("GET", url);
             xhr.addEventListener("load", function () {
-                if (xhr.status !== 200) {
 
-                    window.PollParty.App.navigate(window.PollParty.Views.ErrorView, {
-                        message: "You appear to be presenting a slide that has not yet been configured.",
-                        showCommand: false
-                    });
+                if (xhr.status !== 200) {
+                    handleError();
                     return;
                 }
 

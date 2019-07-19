@@ -24,9 +24,6 @@
             let resetButton = view.querySelector(".reset-button");
             resetButton.addEventListener("click", window.PollParty.App.initialize);
 
-            let navConnectButton = view.querySelector(".nav-connect-button");
-            navConnectButton.addEventListener("click", () => window.PollParty.App.navigate(window.PollParty.Views.ConnectView));
-            
             let navEditButton = view.querySelector(".nav-edit-button");
             navEditButton.addEventListener("click", () => window.PollParty.App.navigate(window.PollParty.Views.EditView));
 
