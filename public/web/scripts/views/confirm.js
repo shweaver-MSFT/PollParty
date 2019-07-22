@@ -7,7 +7,6 @@
 
         let codeButton = null;
         let session = null;
-        let sessionRequest = null;
         let intervalId = null;
 
         function initialize(view, data) {
@@ -24,14 +23,8 @@
                 codeButton = view.querySelector(".code-button");
                 codeButton.addEventListener("click", handleCodeButtonClick);
 
-                // Prep the request for session updates
-                sessionRequest = new XMLHttpRequest();
-                sessionRequest.responseType = "json";
-                sessionRequest.open("GET", `./api/session/${session.code}`);
-                sessionRequest.addEventListener("load", handleSessionResponse);
-
                 // Queue interval to send session requests
-                intervalId = setInterval(sessionRequest.send, requestInterval);
+                intervalId = setInterval(sendSessionRequest, requestInterval);
             }
             catch(e) {
                 handleError(e);
@@ -43,11 +36,6 @@
             if (codeButton) {
                 codeButton.removeEventListener("click", handleCodeButtonClick);
                 codeButton = null;
-            }
-
-            if (sessionRequest) {
-                sessionRequest.removeEventListener("load", handleSessionResponse);
-                sessionRequest = null;
             }
 
             if (intervalId !== null) {
@@ -67,24 +55,31 @@
             });
         }
 
-        function handleCodeButtonClick(e) {
+        function handleCodeButtonClick() {
             window.PollParty.App.navigate(window.PollParty.Views.CodeView);
         }
 
-        function handleSessionResponse() {
-
-            if (sessionRequest.status !== 200) {
-                handleError();
-                return;
-            }
-
-            // If the current question changes, navigate to the response view.
-            let newSession = sessionRequest.response;
-            if (session.currentQuestion.slideId != newSession.currentQuestion.slideId) {
-                window.PollParty.App.navigate(window.PollParty.Views.ResponseView, {
-                    session: newSession
-                });
-            }
+        function sendSessionRequest() {
+            
+            let sessionRequest = new XMLHttpRequest();
+            sessionRequest.responseType = "json";
+            sessionRequest.open("GET", `./api/session/${session.code}`);
+            sessionRequest.addEventListener("load", function() {
+            
+                if (sessionRequest.status !== 200) {
+                    handleError();
+                    return;
+                }
+    
+                // If the current question changes, navigate to the response view.
+                let newSession = sessionRequest.response;
+                if (session.currentQuestion.slideId != newSession.currentQuestion.slideId) {
+                    window.PollParty.App.navigate(window.PollParty.Views.ResponseView, {
+                        session: newSession
+                    });
+                }
+            });
+            sessionRequest.send();
         }
 
         this.initialize = initialize;
