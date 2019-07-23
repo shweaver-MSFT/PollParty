@@ -8,12 +8,13 @@
 .live.view .answer-text {
     font-family: 'Segoe UI';
     font-size: 64px;
+    min-width: 100px;
 }
 
 .live.view .percent-text {
     font-family: 'Segoe UI';
     font-size: 56px;
-    min-width: 136px;
+    min-width: 148px;
     text-align: right;
 }
 
