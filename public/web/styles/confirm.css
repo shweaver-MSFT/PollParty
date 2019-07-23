@@ -11,6 +11,7 @@
 }
 
 .confirm.view .status-icon {
+    font-size: 40px;
     height: 120px;
     width: 120px;
     border: 2px solid #FFFFFF;
