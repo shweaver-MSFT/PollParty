@@ -32,8 +32,10 @@
                     }
                 });
 
-                let sessionData = await response.json();
-                let currentQuestion = sessionData.currentQuestion;
+                let session = await response.json();
+                window.PollParty.App.setActiveSession(session);
+
+                let currentQuestion = session.currentQuestion;
                 let questionText = currentQuestion.questionText;
                 let questionIndex = 0;
 
@@ -45,7 +47,7 @@
                 }
 
                 let questionTotal = questionSet.questions.length;
-                code = sessionData.code;
+                code = session.code;
 
                 let questionTextSpan = view.querySelector(".question-text");
                 questionTextSpan.innerText = questionText;
@@ -101,6 +103,8 @@
             });
 
             let session = await response.json();
+            window.PollParty.App.setActiveSession(session);
+
             let trueCount = 0;
             let falseCount = 0;
             let currentSlideId = session.currentQuestion.slideId;

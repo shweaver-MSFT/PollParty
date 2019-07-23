@@ -4,6 +4,7 @@
     let PollPartyApp = function () {
 
         let currentView = null;
+        let activeSession = null;
 
         async function initialize() {
 
@@ -107,23 +108,36 @@
             });
         };
 
-        function activeViewChanged(args) {
+        function setActiveSession(session) {
+            activeSession = session;
+        }
+
+        async function activeViewChanged(args) {
+            
+            // End the active session, if any. This helps keep the server state clean.
+            if (activeSession !== null) {
+
+                let url = `./api/session/end/${activeSession.code}`;
+                fetch(url, { method: 'POST' });
+                activeSession = null;
+            }
+            
             initialize();
         }
 
-        Office.onReady().then(
-            function () {
-                Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, activeViewChanged,
-                    function (asyncResult) {
-                        if (asyncResult.status === "failed") {
-                            console.log("Action failed with error: " + asyncResult.error.message);
-                        }
-                    });
+        Office.onReady()
+        .then(function () {
+            Office.context.document.addHandlerAsync(Office.EventType.ActiveViewChanged, activeViewChanged, function (asyncResult) {
+                    if (asyncResult.status === "failed") {
+                        console.log("Action failed with error: " + asyncResult.error.message);
+                    }
+                });
             }
         );
 
         this.initialize = initialize;
         this.navigate = navigate;
+        this.setActiveSession = setActiveSession;
     };
 
     // Create default namespace

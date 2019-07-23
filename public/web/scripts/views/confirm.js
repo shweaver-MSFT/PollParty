@@ -66,7 +66,11 @@
             sessionRequest.open("GET", `./api/session/${session.code}`);
             sessionRequest.addEventListener("load", function() {
             
-                if (sessionRequest.status !== 200) {
+                if (sessionRequest.status === 204) {
+                    window.PollParty.App.navigate(window.PollParty.Views.CodeView);
+                    return;
+                }
+                else if (sessionRequest.status !== 200) {
                     handleError();
                     return;
                 }

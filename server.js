@@ -155,8 +155,34 @@ app.get('*/api/session/:code', function (req, res) {
     finally {
         res.end();
     }
+});
 
-    return;
+// End a session
+app.post('*/api/session/end/:code', function(req, res) {
+
+    try {
+        let code = req.params.code;
+        let session = state.sessions.find((s) => s.code == code);
+
+        console.log(`GET */api/session/end/${code}`);
+
+        if (!session) {
+            res.statusCode = 200; // OK
+            return;
+        }
+
+        // Delete the session
+        state.sessions.splice(state.sessions.indexOf(session), 1);
+
+        res.statusCode = 200; // OK
+    }
+    catch (e) {
+        res.statusCode = 500; // Internal server error
+        console.log(e);
+    }
+    finally {
+        res.end();
+    }
 });
 
 // Submit a response
